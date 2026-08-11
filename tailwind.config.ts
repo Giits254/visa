@@ -9,9 +9,9 @@ const config: Config = {
     extend: {
       colors: {
         night: {
-          DEFAULT: "#101B2D",
-          light: "#17263F",
-          soft: "#1F3050",
+          DEFAULT: "#1E3A4C",
+          light: "#274A5F",
+          soft: "#305A72",
         },
         sand: {
           DEFAULT: "#F3E9D7",
@@ -27,6 +27,11 @@ const config: Config = {
           DEFAULT: "#1D8A82",
           light: "#2CA79D",
           dark: "#146862",
+        },
+        success: {
+          DEFAULT: "#1F9D55",
+          light: "#34B868",
+          dark: "#15793F",
         },
         ink: "#16202E",
       },

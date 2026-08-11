@@ -1,9 +1,15 @@
 type StampBadgeProps = {
   label: string;
   sublabel?: string;
-  tone?: "gold" | "teal";
+  tone?: "gold" | "teal" | "success";
   animate?: boolean;
   size?: number;
+};
+
+const TONES: Record<string, { ring: string; inner: string }> = {
+  gold: { ring: "#C89B3C", inner: "#9C7527" },
+  teal: { ring: "#1D8A82", inner: "#146862" },
+  success: { ring: "#1F9D55", inner: "#15793F" },
 };
 
 export default function StampBadge({
@@ -13,8 +19,7 @@ export default function StampBadge({
   animate = false,
   size = 176,
 }: StampBadgeProps) {
-  const ring = tone === "gold" ? "#C89B3C" : "#1D8A82";
-  const inner = tone === "gold" ? "#9C7527" : "#146862";
+  const { ring, inner } = TONES[tone];
 
   return (
     <div

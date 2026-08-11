@@ -1,19 +1,19 @@
-import { gulfCountries, eligibleApplicantCountries } from "@/lib/data";
+import { gulfCountries, eligibleApplicantCountries, PROCESSING_FEE_USD, PROCESSING_FEE_LABEL } from "@/lib/data";
 
 export default function CountriesGrid() {
   return (
     <section id="destinations" className="mx-auto max-w-6xl scroll-mt-20 px-5 py-20 sm:px-8">
       <div className="max-w-2xl">
         <p className="font-mono text-xs uppercase tracking-[0.25em] text-teal-dark">
-          Where you can go
+          Where you can work
         </p>
         <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-night sm:text-4xl">
-          Six destinations, one process to understand.
+          Six destinations, one Freelance Visa process.
         </h2>
         <p className="mt-4 text-ink/70">
-          Every Gulf country sets its own rules, fees and timelines. Here&apos;s the
-          current picture for each — used as the baseline for your eligibility
-          check.
+          Every Gulf country runs its own Freelance Visa route, validity and
+          timeline — but every one of them costs a flat ${PROCESSING_FEE_USD}{" "}
+          {PROCESSING_FEE_LABEL.toLowerCase()}.
         </p>
       </div>
 
@@ -36,18 +36,16 @@ export default function CountriesGrid() {
             </h3>
             <p className="mt-2 text-sm leading-relaxed text-ink/65">{country.notes}</p>
             <div className="mt-4 flex flex-wrap gap-1.5">
-              {country.visaTypes.map((type) => (
-                <span
-                  key={type}
-                  className="rounded-full border border-night/10 bg-sand px-2.5 py-1 text-[11px] font-medium text-ink/70"
-                >
-                  {type}
-                </span>
-              ))}
+              <span className="rounded-full border border-night/10 bg-sand px-2.5 py-1 text-[11px] font-medium text-ink/70">
+                {country.visaLabel}
+              </span>
             </div>
-            <p className="mt-4 font-mono text-sm font-medium text-gold-dark">
-              {country.entryFee}
-            </p>
+            <div className="mt-4 flex items-center justify-between">
+              <p className="text-xs text-ink/50">Valid {country.validity}</p>
+              <p className="font-mono text-sm font-medium text-gold-dark">
+                ${PROCESSING_FEE_USD} flat
+              </p>
+            </div>
           </div>
         ))}
       </div>
@@ -62,10 +60,10 @@ export default function CountriesGrid() {
               Applying from these countries
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-sand/65">
-              Manara currently supports applicants travelling from the
-              nationalities below. Don&apos;t see yours? Run the eligibility
-              check anyway — many other nationalities also qualify for eVisas
-              or visa-on-arrival.
+              Freelance Visa currently supports applicants travelling from
+              the nationalities below. Don&apos;t see yours? Run the
+              eligibility check anyway — many other nationalities also
+              qualify.
             </p>
           </div>
           <div className="flex flex-wrap gap-2.5">

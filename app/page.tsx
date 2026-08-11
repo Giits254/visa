@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
+import DefinitionSection from "@/components/DefinitionSection";
 import CountriesGrid from "@/components/CountriesGrid";
 import RequirementsSection from "@/components/RequirementsSection";
 import ProcessTimeline from "@/components/ProcessTimeline";
@@ -15,6 +16,7 @@ export default function HomePage() {
       <Header />
       <main>
         <Hero />
+        <DefinitionSection />
         <CountriesGrid />
         <RequirementsSection />
         <ProcessTimeline />

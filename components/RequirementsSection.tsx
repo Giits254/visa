@@ -9,16 +9,16 @@ export default function RequirementsSection() {
             What you&apos;ll need
           </p>
           <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-night sm:text-4xl">
-            Core requirements, before country-specific extras.
+            What every Freelance Visa application needs.
           </h2>
           <p className="mt-4 text-ink/70">
-            These six apply across nearly every Gulf tourist visa. Your
-            eligibility check adds anything specific to your destination and
-            nationality on top of this baseline.
+            These four apply to every Freelance Visa, regardless of
+            destination. Your eligibility check confirms these against your
+            specific case.
           </p>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-night/10 bg-night/10 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-night/10 bg-night/10 sm:grid-cols-2 lg:grid-cols-4">
           {coreRequirements.map((req) => (
             <div key={req.title} className="bg-sand p-6">
               <h3 className="font-display text-base font-semibold text-night">

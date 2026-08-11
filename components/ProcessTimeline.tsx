@@ -9,15 +9,16 @@ export default function ProcessTimeline() {
           How it works
         </p>
         <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-night sm:text-4xl">
-          Four steps, in this order.
+          Five steps, in this order.
         </h2>
         <p className="mt-4 text-ink/70">
-          Skipping step one is the most common reason applications stall.
-          Confirm eligibility before you gather documents or pay any fee.
+          Skipping step one is the most common reason Freelance Visa
+          applications stall. Confirm eligibility before you gather
+          documents or pay any fee.
         </p>
       </div>
 
-      <ol className="mt-12 grid grid-cols-1 gap-0 sm:grid-cols-2 lg:grid-cols-4">
+      <ol className="mt-12 grid grid-cols-1 gap-0 sm:grid-cols-2 lg:grid-cols-5">
         {processSteps.map((s, i) => (
           <li key={s.step} className="relative border-t border-night/15 pt-6 pr-6">
             <span className="font-mono text-xs text-gold-dark">{s.step}</span>

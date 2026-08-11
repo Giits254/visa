@@ -9,14 +9,16 @@ import {
   gulfCountries,
   eligibleApplicantCountries,
   coreRequirements,
+  PROCESSING_FEE_USD,
+  PROCESSING_FEE_LABEL,
 } from "@/lib/data";
 
 type Stage = "form" | "checking" | "result";
 
 const checkingSteps = [
-  "Matching your nationality to visa routes",
+  "Verifying your ID and phone number",
+  "Matching your nationality to Freelance Visa routes",
   "Confirming destination requirements",
-  "Reviewing processing time & fees",
   "Compiling your document checklist",
 ];
 
@@ -24,7 +26,9 @@ export default function CheckEligibilityPage() {
   const [stage, setStage] = useState<Stage>("form");
   const [nationality, setNationality] = useState(eligibleApplicantCountries[0]);
   const [destinationCode, setDestinationCode] = useState(gulfCountries[0].code);
-  const [purpose, setPurpose] = useState("Tourism");
+  const [purpose, setPurpose] = useState("Fully online (remote)");
+  const [idNumber, setIdNumber] = useState("");
+  const [phone, setPhone] = useState("");
   const [activeStep, setActiveStep] = useState(0);
 
   const destination = gulfCountries.find((c) => c.code === destinationCode)!;
@@ -52,13 +56,13 @@ export default function CheckEligibilityPage() {
         <section className="border-b border-night/10 bg-night text-sand">
           <div className="mx-auto max-w-3xl px-5 py-14 text-center sm:px-8 sm:py-16">
             <p className="font-mono text-xs uppercase tracking-[0.25em] text-gold">
-              Step 1 of 4
+              Step 1 of 5
             </p>
             <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-              Check your eligibility
+              Check your Freelance Visa eligibility
             </h1>
             <p className="mx-auto mt-3 max-w-xl text-sm text-sand/65 sm:text-base">
-              Answer three questions. This is a guidance simulation based on
+              Answer a few questions. This is a guidance simulation based on
               current published requirements — not a submission to any
               embassy or consulate.
             </p>
@@ -108,20 +112,47 @@ export default function CheckEligibilityPage() {
 
                 <label className="block">
                   <span className="text-sm font-medium text-night">
-                    Purpose of travel
+                    How will you work?
                   </span>
                   <select
                     value={purpose}
                     onChange={(e) => setPurpose(e.target.value)}
                     className="mt-2 w-full rounded-lg border border-night/20 bg-sand px-4 py-3 text-sm text-ink"
                   >
-                    <option>Tourism</option>
-                    <option>Business visit</option>
-                    <option>Visiting family</option>
-                    <option>Umrah / religious visit</option>
-                    <option>Transit</option>
+                    <option>Fully online (remote)</option>
+                    <option>Hybrid (online + onsite)</option>
+                    <option>Onsite (in-country)</option>
+                    <option>Exploring a move, not yet working</option>
                   </select>
                 </label>
+
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  <label className="block">
+                    <span className="text-sm font-medium text-night">
+                      ID number
+                    </span>
+                    <input
+                      required
+                      value={idNumber}
+                      onChange={(e) => setIdNumber(e.target.value)}
+                      placeholder="National ID or passport number"
+                      className="mt-2 w-full rounded-lg border border-night/20 bg-sand px-4 py-3 text-sm text-ink"
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="text-sm font-medium text-night">
+                      Phone number
+                    </span>
+                    <input
+                      required
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="+254 7xx xxx xxx"
+                      className="mt-2 w-full rounded-lg border border-night/20 bg-sand px-4 py-3 text-sm text-ink"
+                    />
+                  </label>
+                </div>
               </div>
 
               <button
@@ -131,7 +162,9 @@ export default function CheckEligibilityPage() {
                 Run eligibility check
               </button>
               <p className="mt-3 text-center text-xs text-ink/50">
-                No payment or document upload required at this stage.
+                No payment is required at this stage. The{" "}
+                {PROCESSING_FEE_LABEL.toLowerCase()} (${PROCESSING_FEE_USD}) only
+                applies once you submit a full application.
               </p>
             </form>
           )}
@@ -140,7 +173,7 @@ export default function CheckEligibilityPage() {
             <div className="rounded-2xl border border-night/10 bg-white/50 p-8 text-center sm:p-10">
               <div className="mx-auto h-14 w-14 animate-spin rounded-full border-2 border-night/10 border-t-teal" />
               <p className="mt-6 font-display text-lg font-semibold text-night">
-                Running your eligibility check…
+                Running your Freelance Visa eligibility check…
               </p>
               <ul className="mx-auto mt-6 max-w-xs space-y-3 text-left">
                 {checkingSteps.map((step, i) => (
@@ -153,7 +186,7 @@ export default function CheckEligibilityPage() {
                     <span
                       className={`flex h-5 w-5 flex-none items-center justify-center rounded-full border text-[10px] ${
                         i <= activeStep
-                          ? "border-teal bg-teal text-white"
+                          ? "border-success bg-success text-white"
                           : "border-night/20"
                       }`}
                     >
@@ -167,19 +200,19 @@ export default function CheckEligibilityPage() {
           )}
 
           {stage === "result" && (
-            <div className="animate-rise rounded-2xl border border-night/10 bg-white/50 p-6 sm:p-10">
+            <div className="animate-rise rounded-2xl border border-success/30 bg-white/50 p-6 sm:p-10">
               <div className="flex flex-col items-center gap-4 border-b border-night/10 pb-8 text-center">
                 <StampBadge
-                  label="Likely Eligible"
+                  label="Freelance Visa Eligible"
                   sublabel={destination.name}
-                  tone="teal"
+                  tone="success"
                   animate
                   size={140}
                 />
                 <p className="max-w-sm text-sm text-ink/65">
-                  Based on {nationality} nationality travelling to{" "}
-                  {destination.name} for {purpose.toLowerCase()}, here&apos;s
-                  what your application will need.
+                  Based on {nationality} nationality applying for a Freelance
+                  Visa in {destination.name} ({purpose.toLowerCase()}),
+                  here&apos;s what your application will need.
                 </p>
               </div>
 
@@ -189,7 +222,7 @@ export default function CheckEligibilityPage() {
                     Visa route
                   </p>
                   <p className="mt-1 font-display text-base font-semibold text-night">
-                    {destination.visaTypes[0]}
+                    {destination.visaLabel}
                   </p>
                 </div>
                 <div>
@@ -202,10 +235,10 @@ export default function CheckEligibilityPage() {
                 </div>
                 <div>
                   <p className="text-xs font-medium uppercase tracking-wider text-ink/45">
-                    Estimated fee
+                    Processing fee
                   </p>
                   <p className="mt-1 font-mono text-base font-semibold text-gold-dark">
-                    {destination.entryFee}
+                    ${PROCESSING_FEE_USD} flat
                   </p>
                 </div>
               </div>
@@ -217,7 +250,7 @@ export default function CheckEligibilityPage() {
                 <ul className="mt-4 space-y-3">
                   {coreRequirements.map((req) => (
                     <li key={req.title} className="flex gap-3 text-sm">
-                      <span className="mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full border border-teal/40 text-[10px] text-teal-dark">
+                      <span className="mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full border border-success/50 text-[10px] text-success-dark">
                         ✓
                       </span>
                       <span>
@@ -234,7 +267,7 @@ export default function CheckEligibilityPage() {
                   href="/apply"
                   className="flex-1 rounded-full bg-night px-6 py-3.5 text-center text-sm font-semibold text-sand transition hover:bg-teal-dark"
                 >
-                  Continue to application
+                  Continue to Freelance Visa application
                 </Link>
                 <button
                   onClick={reset}
