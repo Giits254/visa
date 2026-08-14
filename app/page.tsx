@@ -30,7 +30,7 @@ export default function HomePage() {
               <h2 className="font-display text-2xl font-semibold tracking-tight text-night sm:text-3xl">
                 Ready to see what your application needs?
               </h2>
-              <p className="mt-2 max-w-md text-sm text-ink/65">
+              <p className="mt-2 max-w-md text-sm text-ink/75">
                 The eligibility check takes about a minute and doesn&apos;t
                 require any payment or document upload.
               </p>

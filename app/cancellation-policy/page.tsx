@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { cancellationPolicy, PROCESSING_FEE_USD } from "@/lib/data";
+import { cancellationPolicy, PROCESSING_FEE_USD, AUSTRALIA_FEE_USD } from "@/lib/data";
 
 export default function CancellationPolicyPage() {
   return (
@@ -15,9 +15,10 @@ export default function CancellationPolicyPage() {
             <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
               Cancellation Policy
             </h1>
-            <p className="mx-auto mt-3 max-w-xl text-sm text-sand/65 sm:text-base">
-              How cancellations and refunds work for the ${PROCESSING_FEE_USD}{" "}
-              Freelance Visa Processing Fee.
+            <p className="mx-auto mt-3 max-w-xl text-sm text-sand/70 sm:text-base">
+              How cancellations and refunds work for the Freelance Visa
+              Processing Fee (${PROCESSING_FEE_USD} USD, ${AUSTRALIA_FEE_USD}{" "}
+              USD for Australia).
             </p>
           </div>
         </section>
@@ -33,7 +34,7 @@ export default function CancellationPolicyPage() {
                   <h2 className="font-display text-lg font-semibold text-night">
                     {item.title}
                   </h2>
-                  <p className="mt-1.5 text-sm leading-relaxed text-ink/65">
+                  <p className="mt-1.5 text-sm leading-relaxed text-ink/75">
                     {item.detail}
                   </p>
                 </div>
@@ -41,7 +42,7 @@ export default function CancellationPolicyPage() {
             ))}
           </div>
 
-          <div className="mt-12 rounded-2xl border border-night/10 bg-white/50 p-6 text-xs leading-relaxed text-ink/55 sm:p-8">
+          <div className="mt-12 rounded-2xl border border-night/10 bg-white/50 p-6 text-xs leading-relaxed text-ink/65 sm:p-8">
             This policy applies to the Freelance Visa Processing Fee only,
             not to third-party costs (courier, notarisation, translation)
             that may be incurred separately. This is a draft policy for

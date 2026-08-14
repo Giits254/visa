@@ -1,72 +1,102 @@
 export const BRAND_NAME = "Freelance Visa";
 
-export const PROCESSING_FEE_USD = 100;
+export const PROCESSING_FEE_USD = 100; // baseline fee (all destinations except Australia)
+export const AUSTRALIA_FEE_USD = 150;
 export const PROCESSING_FEE_LABEL = "Freelance Visa Processing Fee";
 export const MPESA_TILL_NUMBER = "867 567";
 
 export const freelanceVisaDefinition = {
   heading: "What is a Freelance Visa?",
   body:
-    "A Freelance Visa is a Gulf residency and entry visa that allows you to legally live in your destination country while working for clients or employers elsewhere — fully online, hybrid, or fully onsite, in whatever mix suits your work. Unlike a standard work visa, it does not require local sponsorship or an in-country employer, and unlike a tourist visa, it permits you to earn income while you're there.",
+    "A Freelance Visa is a residency and entry visa that allows you to legally live in your destination country while working for clients or employers elsewhere — online, hybrid, or onsite, in whatever mix suits your work. Unlike a standard work visa, it does not require local sponsorship or an in-country employer, and unlike a tourist visa, it permits you to earn income while you're there.",
 };
 
-export type GulfCountry = {
+export type Destination = {
   code: string;
   name: string;
   visaLabel: string;
   validity: string;
   avgProcessing: string;
+  feeUSD: number;
   notes: string;
+  states?: string[];
 };
 
-export const gulfCountries: GulfCountry[] = [
+export const australianStates = [
+  "New South Wales",
+  "Victoria",
+  "Queensland",
+  "Western Australia",
+  "South Australia",
+  "Tasmania",
+  "Australian Capital Territory",
+  "Northern Territory",
+];
+
+export const destinations: Destination[] = [
   {
     code: "AE",
     name: "United Arab Emirates",
-    visaLabel: "Freelance Visa (Virtual Working / Remote)",
-    validity: "12 months, renewable",
+    visaLabel: "Freelance Visa (Virtual Working Programme)",
+    validity: "2 years, renewable",
     avgProcessing: "2–3 business days",
-    notes: "Covers fully online work for a foreign employer, hybrid arrangements, and fully onsite freelance work. Passport must be valid 6+ months.",
+    feeUSD: PROCESSING_FEE_USD,
+    notes: "Covers online work for a foreign employer, hybrid arrangements, and onsite freelance work. Passport must be valid 6+ months.",
   },
   {
     code: "SA",
     name: "Saudi Arabia",
     visaLabel: "Freelance Visa (eVisa route)",
-    validity: "12 months, multiple entry",
+    validity: "2 years, multiple entry",
     avgProcessing: "1–3 business days",
+    feeUSD: PROCESSING_FEE_USD,
     notes: "Freelance work permitted alongside eVisa entry for eligible nationalities and professions.",
   },
   {
     code: "QA",
     name: "Qatar",
-    visaLabel: "Freelance Visa (Remote Work)",
-    validity: "12 months",
+    visaLabel: "Freelance Visa",
+    validity: "2 years, renewable",
     avgProcessing: "2–4 business days",
-    notes: "Supports fully online freelance work, hybrid arrangements, and fully onsite work with local clients.",
+    feeUSD: PROCESSING_FEE_USD,
+    notes: "Supports online freelance work, hybrid arrangements, and onsite work with local clients.",
   },
   {
     code: "KW",
     name: "Kuwait",
     visaLabel: "Freelance Visa (eVisa)",
-    validity: "90 days, extendable",
+    validity: "2 years, renewable",
     avgProcessing: "3–5 business days",
+    feeUSD: PROCESSING_FEE_USD,
     notes: "Applicants generally need proof of ongoing freelance income and a confirmed address.",
   },
   {
     code: "BH",
     name: "Bahrain",
     visaLabel: "Freelance Visa (Digital Worker)",
-    validity: "12 months, renewable",
+    validity: "2 years, renewable",
     avgProcessing: "1–2 business days",
-    notes: "One of the fastest Freelance Visa approvals in the Gulf; extendable from inside the country.",
+    feeUSD: PROCESSING_FEE_USD,
+    notes: "One of the fastest Freelance Visa approvals; extendable from inside the country.",
   },
   {
     code: "OM",
     name: "Oman",
-    visaLabel: "Freelance Visa (Unsponsored Remote Work)",
-    validity: "12 months",
+    visaLabel: "Freelance Visa (Unsponsored Route)",
+    validity: "2 years, renewable",
     avgProcessing: "2–3 business days",
+    feeUSD: PROCESSING_FEE_USD,
     notes: "Unsponsored route — no local host or employer required for eligible freelancers.",
+  },
+  {
+    code: "AU",
+    name: "Australia",
+    visaLabel: "Freelance Visa (Digital Nomad Stream)",
+    validity: "2 years, renewable",
+    avgProcessing: "5–10 business days",
+    feeUSD: AUSTRALIA_FEE_USD,
+    notes: "Supports online, hybrid, and onsite freelance work. Requires a state or territory of residence and undergoes additional background checks, so processing runs longer than other destinations.",
+    states: australianStates,
   },
 ];
 
@@ -87,7 +117,6 @@ export const eligibleApplicantCountries = [
   "Bangladesh",
   "Sri Lanka",
   "Indonesia",
-  "Australia",
 ];
 
 export const coreRequirements = [
@@ -122,13 +151,13 @@ export const processSteps = [
   },
   {
     step: "03",
-    title: "Submit your application",
-    detail: "We review your Freelance Visa application for completeness before it moves forward.",
+    title: "Pay the processing fee",
+    detail: `A flat ${PROCESSING_FEE_LABEL.toLowerCase()} applies — $${PROCESSING_FEE_USD} USD for most destinations, $${AUSTRALIA_FEE_USD} USD for Australia — paid via M-Pesa before your application moves forward.`,
   },
   {
     step: "04",
-    title: "Pay the processing fee",
-    detail: `A flat ${PROCESSING_FEE_LABEL} of $${PROCESSING_FEE_USD} USD applies to every Freelance Visa, paid via M-Pesa.`,
+    title: "Submit your application",
+    detail: "With payment confirmed, we review and submit your Freelance Visa application for completeness.",
   },
   {
     step: "05",
@@ -141,7 +170,7 @@ export const tips = [
   {
     title: "Apply 2–3 weeks ahead",
     detail:
-      "Standard Freelance Visa processing is 1–3 business days after payment, but public holidays, peak season and incomplete files can add time. Applying early leaves room for correction.",
+      "Standard Freelance Visa processing is a few business days after payment (longer for Australia), but public holidays, peak season and incomplete files can add time. Applying early leaves room for correction.",
   },
   {
     title: "Match your name exactly",
@@ -168,27 +197,31 @@ export const tips = [
 export const faqs = [
   {
     q: "What exactly is a Freelance Visa?",
-    a: "It's a visa that lets you legally live in a Gulf country while working — for clients or an employer elsewhere, fully online, or in a hybrid arrangement. It's built for remote and freelance workers rather than in-country employees, so it doesn't require local sponsorship.",
+    a: "It's a visa that lets you legally live in your destination country while working — for clients or an employer elsewhere, online, onsite, or in a hybrid arrangement. It's built for remote and freelance workers rather than in-country employees, so it doesn't require local sponsorship.",
   },
   {
     q: "How long does a Freelance Visa take?",
-    a: "Most Freelance Visas are processed in 1–3 business days once your file is complete and the processing fee is paid. Kuwait can take up to 5 business days during busy periods. We recommend building in a buffer of at least 2 weeks before your travel date.",
+    a: "Most Freelance Visas are processed in 1–5 business days once your file is complete and the processing fee is paid. Australia's route takes longer — typically 5–10 business days — due to additional background checks. We recommend building in a buffer of at least 2–3 weeks before your travel date.",
   },
   {
     q: "How much does a Freelance Visa cost?",
-    a: `Every Freelance Visa, regardless of destination, has a flat Freelance Visa Processing Fee of $${PROCESSING_FEE_USD} USD, payable via M-Pesa once your application is submitted.`,
+    a: `The Freelance Visa Processing Fee is a flat $${PROCESSING_FEE_USD} USD for the Gulf destinations we cover, and $${AUSTRALIA_FEE_USD} USD for Australia, reflecting its longer processing. Payment is via M-Pesa once your application is submitted.`,
+  },
+  {
+    q: "How long is a Freelance Visa valid?",
+    a: "Freelance Visas across our destinations are valid for 2 years and are renewable, subject to each destination's renewal requirements at the time.",
   },
   {
     q: "Can I work for a company back home on a Freelance Visa?",
-    a: "Yes. That's the core purpose of the Freelance Visa — it explicitly permits earning income from clients or an employer outside the country, whether you work fully online, onsite, or in a hybrid mix of the two.",
+    a: "Yes. That's the core purpose of the Freelance Visa — it explicitly permits earning income from clients or an employer outside the country, whether you work online, onsite, or in a hybrid mix of the two.",
   },
   {
     q: "What information do I need for the eligibility check?",
-    a: "Your nationality, destination, purpose of travel, ID number and phone number. These let us confirm the Freelance Visa route that applies to you and generate your document checklist.",
+    a: "Your nationality, destination, work style, ID number and phone number — plus your state or territory if you're applying for Australia. These let us confirm the Freelance Visa route that applies to you and generate your document checklist.",
   },
   {
     q: "How do I pay the processing fee?",
-    a: "Currently via M-Pesa: after submitting your application, you'll see our Buy Goods till number and simple steps to complete payment. Bank and card payment are coming soon. Once paid, you'll receive a confirmation and a reference number for tracking.",
+    a: "Currently via M-Pesa: during your application, you'll see our Buy Goods till number and simple steps to complete payment before you submit. Bank and card payment are coming soon. Once paid, you'll receive a confirmation and a reference number for tracking.",
   },
   {
     q: "Can I cancel my application?",
@@ -204,12 +237,12 @@ export const cancellationPolicy = [
   {
     title: "Before document review",
     detail:
-      "If you cancel your Freelance Visa application before our team begins reviewing your documents, you're eligible for a refund of the $100 USD processing fee, minus a $10 USD administrative charge.",
+      "If you cancel your Freelance Visa application before our team begins reviewing your documents, you're eligible for a refund of the processing fee ($100 USD, or $150 USD for Australia), minus a $10 USD administrative charge.",
   },
   {
     title: "During document review",
     detail:
-      "Once document review has started but before submission to the relevant Gulf authority, cancellations are eligible for a 50% refund of the processing fee.",
+      "Once document review has started but before submission to the relevant authority, cancellations are eligible for a 50% refund of the processing fee.",
   },
   {
     title: "After submission to the authority",
@@ -229,6 +262,6 @@ export const cancellationPolicy = [
   {
     title: "Changes of destination",
     detail:
-      "Requesting a change of destination country after payment is treated as a cancellation and new application. The original processing fee follows the cancellation terms above, and a new $100 USD fee applies to the new application.",
+      "Requesting a change of destination country after payment is treated as a cancellation and new application. The original processing fee follows the cancellation terms above, and the new destination's processing fee applies to the new application.",
   },
 ];

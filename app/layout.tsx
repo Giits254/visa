@@ -23,7 +23,7 @@ const mono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: "Freelance Visa | Gulf Freelance & Remote Work Visa Guidance",
   description:
-    "Freelance Visa helps remote and freelance workers understand and prepare Gulf (GCC) Freelance Visa applications — eligibility guidance, requirements, a flat processing fee, and step-by-step support for UAE, Saudi Arabia, Qatar, Kuwait, Bahrain and Oman.",
+    "Freelance Visa helps remote and freelance workers understand and prepare Freelance Visa applications — eligibility guidance, requirements, transparent processing fees, and step-by-step support for UAE, Saudi Arabia, Qatar, Kuwait, Bahrain, Oman, and Australia.",
 };
 
 export default function RootLayout({

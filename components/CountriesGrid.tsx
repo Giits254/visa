@@ -1,4 +1,4 @@
-import { gulfCountries, eligibleApplicantCountries, PROCESSING_FEE_USD, PROCESSING_FEE_LABEL } from "@/lib/data";
+import { destinations, eligibleApplicantCountries, PROCESSING_FEE_USD, AUSTRALIA_FEE_USD } from "@/lib/data";
 
 export default function CountriesGrid() {
   return (
@@ -8,17 +8,17 @@ export default function CountriesGrid() {
           Where you can work
         </p>
         <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-night sm:text-4xl">
-          Six destinations, one Freelance Visa process.
+          Seven destinations, one Freelance Visa process.
         </h2>
-        <p className="mt-4 text-ink/70">
-          Every Gulf country runs its own Freelance Visa route, validity and
-          timeline — but every one of them costs a flat ${PROCESSING_FEE_USD}{" "}
-          {PROCESSING_FEE_LABEL.toLowerCase()}.
+        <p className="mt-4 text-ink/80">
+          Each destination runs its own Freelance Visa route, validity and
+          timeline. The processing fee is ${PROCESSING_FEE_USD} USD for our
+          Gulf destinations and ${AUSTRALIA_FEE_USD} USD for Australia.
         </p>
       </div>
 
       <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {gulfCountries.map((country) => (
+        {destinations.map((country) => (
           <div
             key={country.code}
             className="group rounded-2xl border border-night/10 bg-white/40 p-6 transition hover:border-teal/40 hover:shadow-stamp"
@@ -34,16 +34,16 @@ export default function CountriesGrid() {
             <h3 className="mt-4 font-display text-lg font-semibold text-night">
               {country.name}
             </h3>
-            <p className="mt-2 text-sm leading-relaxed text-ink/65">{country.notes}</p>
+            <p className="mt-2 text-sm leading-relaxed text-ink/75">{country.notes}</p>
             <div className="mt-4 flex flex-wrap gap-1.5">
-              <span className="rounded-full border border-night/10 bg-sand px-2.5 py-1 text-[11px] font-medium text-ink/70">
+              <span className="rounded-full border border-night/10 bg-sand px-2.5 py-1 text-[11px] font-medium text-ink/80">
                 {country.visaLabel}
               </span>
             </div>
             <div className="mt-4 flex items-center justify-between">
-              <p className="text-xs text-ink/50">Valid {country.validity}</p>
+              <p className="text-xs text-ink/70">Valid {country.validity}</p>
               <p className="font-mono text-sm font-medium text-gold-dark">
-                ${PROCESSING_FEE_USD} flat
+                ${country.feeUSD} fee
               </p>
             </div>
           </div>

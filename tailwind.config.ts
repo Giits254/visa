@@ -14,9 +14,9 @@ const config: Config = {
           soft: "#305A72",
         },
         sand: {
-          DEFAULT: "#F3E9D7",
-          dim: "#EADFC8",
-          deep: "#DFCFA9",
+          DEFAULT: "#FAF4E6",
+          dim: "#F2E9D5",
+          deep: "#E6D6AF",
         },
         gold: {
           DEFAULT: "#C89B3C",

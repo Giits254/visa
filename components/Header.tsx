@@ -9,6 +9,8 @@ const navLinks = [
   { href: "/#process", label: "Process" },
   { href: "/#tips", label: "Tips" },
   { href: "/#faq", label: "FAQs" },
+  { href: "/about", label: "About Us" },
+  { href: "/contact", label: "Contact Us" },
 ];
 
 export default function Header() {
@@ -26,19 +28,19 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-7 lg:flex">
+        <nav className="hidden items-center gap-5 xl:flex">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-ink/70 transition hover:text-teal"
+              className="text-sm font-medium text-ink/80 transition hover:text-teal"
             >
               {link.label}
             </a>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden items-center gap-3 xl:flex">
           <Link
             href="/check-eligibility"
             className="rounded-full border border-night/20 px-4 py-2 text-sm font-medium text-night transition hover:border-teal hover:text-teal"
@@ -57,7 +59,7 @@ export default function Header() {
           aria-label="Toggle menu"
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-night/20 lg:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-night/20 xl:hidden"
         >
           <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
             <path d="M0 1H18" stroke="#101B2D" strokeWidth="1.6" />
@@ -68,14 +70,14 @@ export default function Header() {
       </div>
 
       {open && (
-        <div className="border-t border-night/10 bg-sand px-5 pb-6 pt-2 lg:hidden">
+        <div className="border-t border-night/10 bg-sand px-5 pb-6 pt-2 xl:hidden">
           <nav className="flex flex-col gap-1">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-2.5 text-sm font-medium text-ink/80 hover:bg-night/5"
+                className="rounded-lg px-3 py-2.5 text-sm font-medium text-ink/85 hover:bg-night/5"
               >
                 {link.label}
               </a>

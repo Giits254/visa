@@ -11,7 +11,7 @@ export default function RequirementsSection() {
           <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-night sm:text-4xl">
             What every Freelance Visa application needs.
           </h2>
-          <p className="mt-4 text-ink/70">
+          <p className="mt-4 text-ink/80">
             These four apply to every Freelance Visa, regardless of
             destination. Your eligibility check confirms these against your
             specific case.
@@ -24,7 +24,7 @@ export default function RequirementsSection() {
               <h3 className="font-display text-base font-semibold text-night">
                 {req.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink/65">{req.detail}</p>
+              <p className="mt-2 text-sm leading-relaxed text-ink/75">{req.detail}</p>
             </div>
           ))}
         </div>

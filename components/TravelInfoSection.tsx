@@ -41,7 +41,7 @@ export default function TravelInfoSection() {
         <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-night sm:text-4xl">
           Living and working in the Gulf
         </h2>
-        <p className="mt-4 text-ink/70">
+        <p className="mt-4 text-ink/80">
           A Freelance Visa gets you through the border. Here&apos;s what&apos;s
           useful to know once you land and start working.
         </p>
@@ -55,7 +55,7 @@ export default function TravelInfoSection() {
               <h3 className="font-display text-base font-semibold text-night">
                 {item.title}
               </h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-ink/65">
+              <p className="mt-1.5 text-sm leading-relaxed text-ink/75">
                 {item.detail}
               </p>
             </div>

@@ -10,21 +10,18 @@ export default function DefinitionSection() {
         <h2 className="mt-3 font-display text-2xl font-semibold tracking-tight text-night sm:text-3xl">
           {freelanceVisaDefinition.heading}
         </h2>
-        <p className="mt-4 text-base leading-relaxed text-ink/75">
+        <p className="mt-4 text-base leading-relaxed text-ink/82">
           {freelanceVisaDefinition.body}
         </p>
         <div className="mt-6 flex flex-wrap gap-2.5">
-          <span className="rounded-full bg-white/70 px-3.5 py-1.5 text-xs font-medium text-ink/70">
-            Work fully online
+          <span className="rounded-full bg-white/70 px-3.5 py-1.5 text-xs font-medium text-ink/80">
+            Works with any style: onsite, hybrid, or online
           </span>
-          <span className="rounded-full bg-white/70 px-3.5 py-1.5 text-xs font-medium text-ink/70">
-            Or hybrid, with local clients
-          </span>
-          <span className="rounded-full bg-white/70 px-3.5 py-1.5 text-xs font-medium text-ink/70">
-            Or fully onsite
-          </span>
-          <span className="rounded-full bg-white/70 px-3.5 py-1.5 text-xs font-medium text-ink/70">
+          <span className="rounded-full bg-white/70 px-3.5 py-1.5 text-xs font-medium text-ink/80">
             No local sponsor required
+          </span>
+          <span className="rounded-full bg-white/70 px-3.5 py-1.5 text-xs font-medium text-ink/80">
+            Valid for 2 years
           </span>
         </div>
       </div>

@@ -43,6 +43,8 @@ export default function Footer() {
               <li><a href="/#faq" className="hover:text-teal-light">FAQs</a></li>
               <li><Link href="/check-eligibility" className="hover:text-teal-light">Check eligibility</Link></li>
               <li><Link href="/apply" className="hover:text-teal-light">Apply now</Link></li>
+              <li><Link href="/about" className="hover:text-teal-light">About us</Link></li>
+              <li><Link href="/contact" className="hover:text-teal-light">Contact us</Link></li>
               <li><Link href="/cancellation-policy" className="hover:text-teal-light">Cancellation policy</Link></li>
             </ul>
           </div>

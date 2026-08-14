@@ -5,21 +5,18 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import StampBadge from "@/components/StampBadge";
-import {
-  gulfCountries,
-  PROCESSING_FEE_USD,
-  PROCESSING_FEE_LABEL,
-  MPESA_TILL_NUMBER,
-} from "@/lib/data";
+import { destinations, PROCESSING_FEE_LABEL, MPESA_TILL_NUMBER } from "@/lib/data";
+import { validatePhone, validateIdNumber } from "@/lib/validation";
 
-const steps = ["Applicant details", "Address & documents", "Review & submit"];
+const steps = ["Applicant details", "Address & documents", "Payment", "Review & submit"];
 
-type Stage = "form" | "submitting" | "awaitingPayment" | "paid";
+type Stage = "form" | "submitting" | "paid";
 
 export default function ApplyPage() {
   const [step, setStep] = useState(0);
   const [stage, setStage] = useState<Stage>("form");
   const [confirmingPayment, setConfirmingPayment] = useState(false);
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false);
 
   const [form, setForm] = useState({
     fullName: "",
@@ -27,15 +24,20 @@ export default function ApplyPage() {
     phone: "",
     idNumber: "",
     nationality: "",
-    destination: gulfCountries[0].code,
+    destination: destinations[0].code,
+    state: "",
     travelDate: "",
-    purpose: "Fully online (remote)",
+    purpose: "Hybrid (online + onsite)",
     street: "",
     city: "",
     zip: "",
   });
 
-  const destination = gulfCountries.find((c) => c.code === form.destination)!;
+  const [errors, setErrors] = useState<{ phone?: string; idNumber?: string; state?: string }>({});
+
+  const destination = destinations.find((c) => c.code === form.destination)!;
+  const isAustralia = destination.code === "AU";
+
   const [refNumber] = useState(
     () => "FLV-" + Math.floor(100000 + Math.random() * 900000)
   );
@@ -52,25 +54,49 @@ export default function ApplyPage() {
     setForm((f) => ({ ...f, [key]: value }));
   }
 
+  function validateStep0() {
+    const phoneError = validatePhone(form.phone);
+    const idError = validateIdNumber(form.idNumber);
+    if (phoneError || idError) {
+      setErrors({ phone: phoneError ?? undefined, idNumber: idError ?? undefined });
+      return false;
+    }
+    setErrors({});
+    return true;
+  }
+
+  function validateStep1() {
+    if (isAustralia && !form.state) {
+      setErrors((prev) => ({ ...prev, state: "Select a state or territory." }));
+      return false;
+    }
+    setErrors((prev) => ({ ...prev, state: undefined }));
+    return true;
+  }
+
   function next() {
+    if (step === 0 && !validateStep0()) return;
+    if (step === 1 && !validateStep1()) return;
+    if (step === 2 && !paymentConfirmed) return; // must confirm payment to leave payment step
     setStep((s) => Math.min(s + 1, steps.length - 1));
   }
   function back() {
     setStep((s) => Math.max(s - 1, 0));
   }
 
-  function submit(e: React.FormEvent) {
-    e.preventDefault();
-    setStage("submitting");
-    setTimeout(() => setStage("awaitingPayment"), 1200);
-  }
-
   function confirmPayment() {
     setConfirmingPayment(true);
     setTimeout(() => {
       setConfirmingPayment(false);
-      setStage("paid");
+      setPaymentConfirmed(true);
     }, 1300);
+  }
+
+  function submit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!paymentConfirmed) return;
+    setStage("submitting");
+    setTimeout(() => setStage("paid"), 1200);
   }
 
   // ---------- PAID / INVOICE ----------
@@ -81,15 +107,14 @@ export default function ApplyPage() {
         <main className="bg-sand">
           <section className="mx-auto max-w-2xl px-5 py-16 sm:px-8 sm:py-20">
             <div className="flex flex-col items-center text-center">
-              <StampBadge label="Payment Received" sublabel={refNumber} tone="success" animate size={140} />
+              <StampBadge label="Application Submitted" sublabel={refNumber} tone="success" animate size={140} />
               <h1 className="mt-6 font-display text-2xl font-semibold text-night sm:text-3xl">
-                You&apos;re paid up, {form.fullName.split(" ")[0] || "there"}.
+                You&apos;re all set, {form.fullName.split(" ")[0] || "there"}.
               </h1>
-              <p className="mt-3 max-w-md text-sm text-ink/65">
-                Your Freelance Visa application for {destination.name} is now
-                in our processing queue. We&apos;ll email {form.email || "you"}{" "}
-                with updates, and typical processing after payment is{" "}
-                {destination.avgProcessing}.
+              <p className="mt-3 max-w-md text-sm text-ink/75">
+                Your paid Freelance Visa application for {destination.name} is
+                now in our processing queue. We&apos;ll email {form.email || "you"}{" "}
+                with updates, and typical processing is {destination.avgProcessing}.
               </p>
             </div>
 
@@ -99,7 +124,7 @@ export default function ApplyPage() {
                   <p className="font-display text-lg font-semibold text-night">
                     Freelance Visa
                   </p>
-                  <p className="mt-1 text-xs text-ink/55">
+                  <p className="mt-1 text-xs text-ink/60">
                     Nairobi, Kenya · hello@freelancevisa.co
                   </p>
                 </div>
@@ -107,7 +132,7 @@ export default function ApplyPage() {
                   <p className="font-display text-base font-semibold text-night">
                     Invoice {invoiceNumber}
                   </p>
-                  <p className="mt-1 text-xs text-ink/55">Issued {today}</p>
+                  <p className="mt-1 text-xs text-ink/60">Issued {today}</p>
                   <span className="mt-2 inline-block rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success-dark">
                     PAID
                   </span>
@@ -116,28 +141,31 @@ export default function ApplyPage() {
 
               <div className="grid grid-cols-1 gap-6 py-6 text-sm sm:grid-cols-2">
                 <div>
-                  <p className="text-xs font-medium uppercase tracking-wider text-ink/45">
+                  <p className="text-xs font-medium uppercase tracking-wider text-ink/55">
                     Billed to
                   </p>
                   <p className="mt-1 font-medium text-night">{form.fullName || "—"}</p>
-                  <p className="text-ink/60">{form.email || "—"}</p>
-                  <p className="text-ink/60">{form.phone || "—"}</p>
+                  <p className="text-ink/65">{form.email || "—"}</p>
+                  <p className="text-ink/65">{form.phone || "—"}</p>
                 </div>
                 <div>
-                  <p className="text-xs font-medium uppercase tracking-wider text-ink/45">
+                  <p className="text-xs font-medium uppercase tracking-wider text-ink/55">
                     Application reference
                   </p>
                   <p className="mt-1 font-mono font-medium text-night">{refNumber}</p>
-                  <p className="mt-2 text-xs font-medium uppercase tracking-wider text-ink/45">
+                  <p className="mt-2 text-xs font-medium uppercase tracking-wider text-ink/55">
                     Destination
                   </p>
-                  <p className="text-ink/60">{destination.name}</p>
+                  <p className="text-ink/65">
+                    {destination.name}
+                    {isAustralia && form.state ? `, ${form.state}` : ""}
+                  </p>
                 </div>
               </div>
 
               <table className="w-full border-t border-night/10 text-sm">
                 <thead>
-                  <tr className="text-left text-xs uppercase tracking-wider text-ink/45">
+                  <tr className="text-left text-xs uppercase tracking-wider text-ink/55">
                     <th className="py-3 font-medium">Description</th>
                     <th className="py-3 text-right font-medium">Amount</th>
                   </tr>
@@ -148,7 +176,7 @@ export default function ApplyPage() {
                       {PROCESSING_FEE_LABEL} — {destination.name}
                     </td>
                     <td className="py-3 text-right font-mono text-night">
-                      ${PROCESSING_FEE_USD.toFixed(2)}
+                      ${destination.feeUSD.toFixed(2)}
                     </td>
                   </tr>
                 </tbody>
@@ -156,13 +184,13 @@ export default function ApplyPage() {
                   <tr className="border-t border-night/20">
                     <td className="py-3 font-display font-semibold text-night">Total paid</td>
                     <td className="py-3 text-right font-mono font-semibold text-night">
-                      ${PROCESSING_FEE_USD.toFixed(2)} USD
+                      ${destination.feeUSD.toFixed(2)} USD
                     </td>
                   </tr>
                 </tfoot>
               </table>
 
-              <p className="mt-6 text-xs leading-relaxed text-ink/50">
+              <p className="mt-6 text-xs leading-relaxed text-ink/60">
                 Paid via M-Pesa, Till {MPESA_TILL_NUMBER}. This receipt confirms
                 payment of the {PROCESSING_FEE_LABEL.toLowerCase()} only —
                 it is not a Freelance Visa issuance guarantee. See our{" "}
@@ -186,88 +214,6 @@ export default function ApplyPage() {
               >
                 Back to home
               </Link>
-            </div>
-          </section>
-        </main>
-        <Footer />
-      </>
-    );
-  }
-
-  // ---------- AWAITING PAYMENT ----------
-  if (stage === "awaitingPayment") {
-    return (
-      <>
-        <Header />
-        <main className="bg-sand">
-          <section className="mx-auto max-w-xl px-5 py-16 sm:px-8 sm:py-20">
-            <div className="flex flex-col items-center text-center">
-              <StampBadge label="Application Received" sublabel={refNumber} tone="gold" animate size={140} />
-              <h1 className="mt-6 font-display text-2xl font-semibold text-night sm:text-3xl">
-                One step left — pay the {PROCESSING_FEE_LABEL.toLowerCase()}.
-              </h1>
-              <p className="mt-3 max-w-md text-sm text-ink/65">
-                Your reference number is{" "}
-                <span className="font-mono font-medium text-night">{refNumber}</span>.
-                Complete payment below to move your Freelance Visa
-                application for {destination.name} into processing.
-              </p>
-            </div>
-
-            <div className="mt-8 rounded-2xl border border-night/10 bg-white/60 p-6 sm:p-8">
-              <div className="flex items-center justify-between rounded-xl bg-night px-5 py-4 text-sand">
-                <div>
-                  <p className="text-xs uppercase tracking-wider text-sand/60">Amount due</p>
-                  <p className="font-mono text-xl font-semibold text-gold">
-                    ${PROCESSING_FEE_USD}.00 USD
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-xs uppercase tracking-wider text-sand/60">M-Pesa Till</p>
-                  <p className="font-mono text-xl font-semibold">{MPESA_TILL_NUMBER}</p>
-                </div>
-              </div>
-
-              <ol className="mt-6 space-y-3 text-sm">
-                {[
-                  "Open the M-Pesa menu on your phone.",
-                  "Select Lipa na M-Pesa, then Buy Goods and Services.",
-                  `Enter Till Number ${MPESA_TILL_NUMBER}.`,
-                  `Enter the amount — $${PROCESSING_FEE_USD} USD, or its KES equivalent at checkout.`,
-                  "Enter your M-Pesa PIN and confirm.",
-                  "You'll get an M-Pesa confirmation message immediately — keep it for your records.",
-                ].map((line, i) => (
-                  <li key={line} className="flex gap-3">
-                    <span className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-teal/10 font-mono text-xs font-medium text-teal-dark">
-                      {i + 1}
-                    </span>
-                    <span className="text-ink/75">{line}</span>
-                  </li>
-                ))}
-              </ol>
-
-              <p className="mt-6 rounded-lg bg-gold/10 p-4 text-xs leading-relaxed text-gold-dark">
-                Bank transfer and card payment are coming soon. For now,
-                M-Pesa Buy Goods is the only supported payment method.
-              </p>
-
-              <div className="mt-6 border-t border-dashed border-night/15 pt-6">
-                <p className="text-xs font-medium uppercase tracking-wider text-ink/45">
-                  Draft preview
-                </p>
-                <p className="mt-1 text-xs text-ink/55">
-                  Payment isn&apos;t connected yet — use this button to
-                  preview what the applicant sees once M-Pesa confirms
-                  their payment.
-                </p>
-                <button
-                  onClick={confirmPayment}
-                  disabled={confirmingPayment}
-                  className="mt-4 w-full rounded-full bg-success px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-success-dark disabled:opacity-60"
-                >
-                  {confirmingPayment ? "Confirming payment…" : "Simulate payment confirmation"}
-                </button>
-              </div>
             </div>
           </section>
         </main>
@@ -307,10 +253,9 @@ export default function ApplyPage() {
             <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
               Apply for your Freelance Visa
             </h1>
-            <p className="mx-auto mt-3 max-w-xl text-sm text-sand/65 sm:text-base">
-              Three short sections, then a flat ${PROCESSING_FEE_USD}{" "}
-              {PROCESSING_FEE_LABEL.toLowerCase()} to move your application
-              into processing.
+            <p className="mx-auto mt-3 max-w-xl text-sm text-sand/70 sm:text-base">
+              Pay the processing fee, then submit — your Freelance Visa
+              application moves into the queue right after.
             </p>
           </div>
         </section>
@@ -324,14 +269,14 @@ export default function ApplyPage() {
                     className={`flex h-8 w-8 items-center justify-center rounded-full font-mono text-xs font-medium ${
                       i <= step
                         ? "bg-teal text-white"
-                        : "border border-night/20 text-ink/40"
+                        : "border border-night/20 text-ink/50"
                     }`}
                   >
                     {i + 1}
                   </span>
                   <span
                     className={`hidden text-xs sm:block ${
-                      i <= step ? "text-night" : "text-ink/40"
+                      i <= step ? "text-night" : "text-ink/50"
                     }`}
                   >
                     {label}
@@ -350,7 +295,7 @@ export default function ApplyPage() {
 
           <form
             onSubmit={step === steps.length - 1 ? submit : (e) => e.preventDefault()}
-            className="rounded-2xl border border-night/10 bg-white/50 p-6 sm:p-8"
+            className="rounded-2xl border border-night/10 bg-white p-6 shadow-sm sm:p-8"
           >
             {step === 0 && (
               <div className="grid grid-cols-1 gap-6">
@@ -361,7 +306,7 @@ export default function ApplyPage() {
                     value={form.fullName}
                     onChange={(e) => update("fullName", e.target.value)}
                     placeholder="As shown on your passport"
-                    className="mt-2 w-full rounded-lg border border-night/20 bg-sand px-4 py-3 text-sm text-ink"
+                    className="mt-2 w-full rounded-lg border border-night/25 bg-sand px-4 py-3 text-sm text-ink"
                   />
                 </label>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -373,7 +318,7 @@ export default function ApplyPage() {
                       value={form.email}
                       onChange={(e) => update("email", e.target.value)}
                       placeholder="you@example.com"
-                      className="mt-2 w-full rounded-lg border border-night/20 bg-sand px-4 py-3 text-sm text-ink"
+                      className="mt-2 w-full rounded-lg border border-night/25 bg-sand px-4 py-3 text-sm text-ink"
                     />
                   </label>
                   <label className="block">
@@ -382,10 +327,18 @@ export default function ApplyPage() {
                       required
                       type="tel"
                       value={form.phone}
-                      onChange={(e) => update("phone", e.target.value)}
+                      onChange={(e) => {
+                        update("phone", e.target.value);
+                        setErrors((prev) => ({ ...prev, phone: undefined }));
+                      }}
                       placeholder="+254 7xx xxx xxx"
-                      className="mt-2 w-full rounded-lg border border-night/20 bg-sand px-4 py-3 text-sm text-ink"
+                      className={`mt-2 w-full rounded-lg border bg-sand px-4 py-3 text-sm text-ink ${
+                        errors.phone ? "border-red-500" : "border-night/25"
+                      }`}
                     />
+                    {errors.phone && (
+                      <p className="mt-1.5 text-xs font-medium text-red-600">{errors.phone}</p>
+                    )}
                   </label>
                 </div>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -394,10 +347,19 @@ export default function ApplyPage() {
                     <input
                       required
                       value={form.idNumber}
-                      onChange={(e) => update("idNumber", e.target.value)}
-                      placeholder="National ID or passport number"
-                      className="mt-2 w-full rounded-lg border border-night/20 bg-sand px-4 py-3 text-sm text-ink"
+                      onChange={(e) => {
+                        update("idNumber", e.target.value);
+                        setErrors((prev) => ({ ...prev, idNumber: undefined }));
+                      }}
+                      placeholder="ID no."
+                      inputMode="numeric"
+                      className={`mt-2 w-full rounded-lg border bg-sand px-4 py-3 text-sm text-ink ${
+                        errors.idNumber ? "border-red-500" : "border-night/25"
+                      }`}
                     />
+                    {errors.idNumber && (
+                      <p className="mt-1.5 text-xs font-medium text-red-600">{errors.idNumber}</p>
+                    )}
                   </label>
                   <label className="block">
                     <span className="text-sm font-medium text-night">Nationality</span>
@@ -406,7 +368,7 @@ export default function ApplyPage() {
                       value={form.nationality}
                       onChange={(e) => update("nationality", e.target.value)}
                       placeholder="e.g. Kenyan"
-                      className="mt-2 w-full rounded-lg border border-night/20 bg-sand px-4 py-3 text-sm text-ink"
+                      className="mt-2 w-full rounded-lg border border-night/25 bg-sand px-4 py-3 text-sm text-ink"
                     />
                   </label>
                 </div>
@@ -422,7 +384,7 @@ export default function ApplyPage() {
                     value={form.street}
                     onChange={(e) => update("street", e.target.value)}
                     placeholder="House number and street name"
-                    className="mt-2 w-full rounded-lg border border-night/20 bg-sand px-4 py-3 text-sm text-ink"
+                    className="mt-2 w-full rounded-lg border border-night/25 bg-sand px-4 py-3 text-sm text-ink"
                   />
                 </label>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -433,7 +395,7 @@ export default function ApplyPage() {
                       value={form.city}
                       onChange={(e) => update("city", e.target.value)}
                       placeholder="e.g. Nairobi"
-                      className="mt-2 w-full rounded-lg border border-night/20 bg-sand px-4 py-3 text-sm text-ink"
+                      className="mt-2 w-full rounded-lg border border-night/25 bg-sand px-4 py-3 text-sm text-ink"
                     />
                   </label>
                   <label className="block">
@@ -443,7 +405,7 @@ export default function ApplyPage() {
                       value={form.zip}
                       onChange={(e) => update("zip", e.target.value)}
                       placeholder="e.g. 00100"
-                      className="mt-2 w-full rounded-lg border border-night/20 bg-sand px-4 py-3 text-sm text-ink"
+                      className="mt-2 w-full rounded-lg border border-night/25 bg-sand px-4 py-3 text-sm text-ink"
                     />
                   </label>
                 </div>
@@ -451,16 +413,47 @@ export default function ApplyPage() {
                   <span className="text-sm font-medium text-night">Destination</span>
                   <select
                     value={form.destination}
-                    onChange={(e) => update("destination", e.target.value)}
-                    className="mt-2 w-full rounded-lg border border-night/20 bg-sand px-4 py-3 text-sm text-ink"
+                    onChange={(e) => {
+                      update("destination", e.target.value);
+                      update("state", "");
+                      setErrors((prev) => ({ ...prev, state: undefined }));
+                    }}
+                    className="mt-2 w-full rounded-lg border border-night/25 bg-sand px-4 py-3 text-sm text-ink"
                   >
-                    {gulfCountries.map((c) => (
+                    {destinations.map((c) => (
                       <option key={c.code} value={c.code}>
                         {c.name}
                       </option>
                     ))}
                   </select>
                 </label>
+
+                {isAustralia && (
+                  <label className="block">
+                    <span className="text-sm font-medium text-night">State or territory</span>
+                    <select
+                      value={form.state}
+                      onChange={(e) => {
+                        update("state", e.target.value);
+                        setErrors((prev) => ({ ...prev, state: undefined }));
+                      }}
+                      className={`mt-2 w-full rounded-lg border bg-sand px-4 py-3 text-sm text-ink ${
+                        errors.state ? "border-red-500" : "border-night/25"
+                      }`}
+                    >
+                      <option value="">Select a state or territory</option>
+                      {destination.states?.map((s) => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.state && (
+                      <p className="mt-1.5 text-xs font-medium text-red-600">{errors.state}</p>
+                    )}
+                  </label>
+                )}
+
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                   <label className="block">
                     <span className="text-sm font-medium text-night">
@@ -471,7 +464,7 @@ export default function ApplyPage() {
                       type="date"
                       value={form.travelDate}
                       onChange={(e) => update("travelDate", e.target.value)}
-                      className="mt-2 w-full rounded-lg border border-night/20 bg-sand px-4 py-3 text-sm text-ink"
+                      className="mt-2 w-full rounded-lg border border-night/25 bg-sand px-4 py-3 text-sm text-ink"
                     />
                   </label>
                   <label className="block">
@@ -481,11 +474,11 @@ export default function ApplyPage() {
                     <select
                       value={form.purpose}
                       onChange={(e) => update("purpose", e.target.value)}
-                      className="mt-2 w-full rounded-lg border border-night/20 bg-sand px-4 py-3 text-sm text-ink"
+                      className="mt-2 w-full rounded-lg border border-night/25 bg-sand px-4 py-3 text-sm text-ink"
                     >
-                      <option>Fully online (remote)</option>
                       <option>Hybrid (online + onsite)</option>
                       <option>Onsite (in-country)</option>
+                      <option>Fully online (remote)</option>
                     </select>
                   </label>
                 </div>
@@ -498,6 +491,78 @@ export default function ApplyPage() {
 
             {step === 2 && (
               <div>
+                <div className="flex items-center justify-between rounded-xl bg-night px-5 py-4 text-sand">
+                  <div>
+                    <p className="text-xs uppercase tracking-wider text-sand/60">Amount due</p>
+                    <p className="font-mono text-xl font-semibold text-gold">
+                      ${destination.feeUSD}.00 USD
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs uppercase tracking-wider text-sand/60">M-Pesa Till</p>
+                    <p className="font-mono text-xl font-semibold">{MPESA_TILL_NUMBER}</p>
+                  </div>
+                </div>
+
+                <ol className="mt-6 space-y-3 text-sm">
+                  {[
+                    "Open the M-Pesa menu on your phone.",
+                    "Select Lipa na M-Pesa, then Buy Goods and Services.",
+                    `Enter Till Number ${MPESA_TILL_NUMBER}.`,
+                    `Enter the amount — $${destination.feeUSD} USD, or its KES equivalent at checkout.`,
+                    "Enter your M-Pesa PIN and confirm.",
+                    "You'll get an M-Pesa confirmation message immediately — keep it for your records.",
+                  ].map((line, i) => (
+                    <li key={line} className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-teal/10 font-mono text-xs font-medium text-teal-dark">
+                        {i + 1}
+                      </span>
+                      <span className="text-ink/80">{line}</span>
+                    </li>
+                  ))}
+                </ol>
+
+                <p className="mt-6 rounded-lg bg-gold/10 p-4 text-xs leading-relaxed text-gold-dark">
+                  Bank transfer and card payment are coming soon. For now,
+                  M-Pesa Buy Goods is the only supported payment method.
+                </p>
+
+                <div className="mt-6 border-t border-dashed border-night/15 pt-6">
+                  {paymentConfirmed ? (
+                    <div className="flex items-center gap-3 rounded-lg bg-success/10 p-4">
+                      <span className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-success text-xs text-white">
+                        ✓
+                      </span>
+                      <p className="text-sm font-medium text-success-dark">
+                        Payment confirmed — continue to review &amp; submit.
+                      </p>
+                    </div>
+                  ) : (
+                    <>
+                      <p className="text-xs font-medium uppercase tracking-wider text-ink/55">
+                        Draft preview
+                      </p>
+                      <p className="mt-1 text-xs text-ink/65">
+                        Payment isn&apos;t connected yet — use this button to
+                        preview what happens once M-Pesa confirms payment.
+                        You must confirm payment before you can submit.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={confirmPayment}
+                        disabled={confirmingPayment}
+                        className="mt-4 w-full rounded-full bg-success px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-success-dark disabled:opacity-60"
+                      >
+                        {confirmingPayment ? "Confirming payment…" : "Simulate payment confirmation"}
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {step === 3 && (
+              <div>
                 <p className="text-sm font-medium text-night">Review your details</p>
                 <dl className="mt-4 divide-y divide-night/10 text-sm">
                   {[
@@ -507,31 +572,30 @@ export default function ApplyPage() {
                     ["ID number", form.idNumber || "—"],
                     ["Nationality", form.nationality || "—"],
                     ["Address", [form.street, form.city, form.zip].filter(Boolean).join(", ") || "—"],
-                    ["Destination", destination.name],
+                    ["Destination", destination.name + (isAustralia && form.state ? `, ${form.state}` : "")],
                     ["Travel date", form.travelDate || "—"],
                     ["Work style", form.purpose],
                   ].map(([label, value]) => (
                     <div key={label} className="flex justify-between gap-4 py-2.5">
-                      <dt className="text-ink/55">{label}</dt>
+                      <dt className="text-ink/60">{label}</dt>
                       <dd className="text-right font-medium text-night">{value}</dd>
                     </div>
                   ))}
                 </dl>
-                <div className="mt-6 flex items-center justify-between rounded-lg bg-gold/10 p-4">
+                <div className="mt-6 flex items-center justify-between rounded-lg bg-success/10 p-4">
                   <span className="text-sm font-medium text-night">
-                    {PROCESSING_FEE_LABEL}
+                    {PROCESSING_FEE_LABEL} — Paid ✓
                   </span>
-                  <span className="font-mono text-sm font-semibold text-gold-dark">
-                    ${PROCESSING_FEE_USD}.00 USD
+                  <span className="font-mono text-sm font-semibold text-success-dark">
+                    ${destination.feeUSD}.00 USD
                   </span>
                 </div>
-                <p className="mt-4 text-xs leading-relaxed text-ink/50">
+                <p className="mt-4 text-xs leading-relaxed text-ink/60">
                   By submitting, you agree to our{" "}
                   <Link href="/cancellation-policy" className="underline hover:text-teal">
                     Cancellation Policy
                   </Link>
-                  . Submitting sends your details to our review team; you&apos;ll
-                  pay the processing fee in the next step.
+                  . Submitting sends your paid application to our review team.
                 </p>
               </div>
             )}
@@ -550,9 +614,10 @@ export default function ApplyPage() {
                 <button
                   type="button"
                   onClick={next}
-                  className="flex-1 rounded-full bg-night px-6 py-3 text-sm font-semibold text-sand transition hover:bg-teal-dark"
+                  disabled={step === 2 && !paymentConfirmed}
+                  className="flex-1 rounded-full bg-night px-6 py-3 text-sm font-semibold text-sand transition hover:bg-teal-dark disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  Continue
+                  {step === 2 && !paymentConfirmed ? "Confirm payment to continue" : "Continue"}
                 </button>
               ) : (
                 <button

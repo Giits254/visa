@@ -43,7 +43,7 @@ export default function FAQSection() {
                 </span>
               </button>
               {isOpen && (
-                <p className="pb-6 pr-10 text-sm leading-relaxed text-ink/65">
+                <p className="pb-6 pr-10 text-sm leading-relaxed text-ink/75">
                   {item.a}
                 </p>
               )}

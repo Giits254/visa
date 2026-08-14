@@ -9,7 +9,7 @@ export default function Hero() {
         className="pointer-events-none absolute inset-0 opacity-[0.06]"
         style={{
           backgroundImage:
-            "repeating-linear-gradient(135deg, #F3E9D7 0px, #F3E9D7 1px, transparent 1px, transparent 26px)",
+            "repeating-linear-gradient(135deg, #FAF4E6 0px, #FAF4E6 1px, transparent 1px, transparent 26px)",
         }}
         aria-hidden
       />
@@ -19,15 +19,16 @@ export default function Hero() {
             Freelance Visa Guidance · Est. from Nairobi
           </p>
           <h1 className="mt-5 font-display text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.4rem]">
-            Your Freelance Visa,
+            Move abroad.
             <br />
-            understood before you apply.
+            Keep working the way you already do.
           </h1>
           <p className="mt-6 max-w-lg text-base leading-relaxed text-sand/70 sm:text-lg">
-            Freelance Visa walks you through what it takes to live and work —
-            online, hybrid, or onsite — in the UAE, Saudi Arabia, Qatar, Kuwait,
-            Bahrain, Oman, or Australia. Start with a free eligibility check,
-            then apply for a flat ${PROCESSING_FEE_USD} processing fee.
+            Freelance Visa is your guide to living legally in the UAE, Saudi
+            Arabia, Qatar, Kuwait, Bahrain, Oman, or Australia — onsite,
+            hybrid, or online — without needing a local employer to sponsor
+            you. Start with a free eligibility check, then apply for a flat
+            processing fee.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -51,12 +52,12 @@ export default function Hero() {
               <dd className="mt-1 text-xs text-sand/60 sm:text-sm">Destinations covered</dd>
             </div>
             <div>
-              <dt className="font-mono text-2xl font-medium text-gold sm:text-3xl">1–3</dt>
+              <dt className="font-mono text-2xl font-medium text-gold sm:text-3xl">1–10</dt>
               <dd className="mt-1 text-xs text-sand/60 sm:text-sm">Typical business days</dd>
             </div>
             <div>
-              <dt className="font-mono text-2xl font-medium text-gold sm:text-3xl">${PROCESSING_FEE_USD}</dt>
-              <dd className="mt-1 text-xs text-sand/60 sm:text-sm">Flat Freelance Visa fee</dd>
+              <dt className="font-mono text-2xl font-medium text-gold sm:text-3xl">From ${PROCESSING_FEE_USD}</dt>
+              <dd className="mt-1 text-xs text-sand/60 sm:text-sm">Processing fee</dd>
             </div>
           </dl>
         </div>
@@ -71,5 +72,3 @@ export default function Hero() {
     </section>
   );
 }
-
-
