@@ -21,7 +21,7 @@ export default function Hero() {
           <h1 className="mt-5 font-display text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.4rem]">
             Move abroad.
             <br />
-            Keep working the way you already do.
+            Your Visa Journey, Simplified
           </h1>
           <p className="mt-6 max-w-lg text-base leading-relaxed text-sand/70 sm:text-lg">
             Freelance Visa is your guide to living legally in the UAE, Saudi
