@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -33,7 +33,51 @@ export default function ApplyPage() {
     zip: "",
   });
 
-  const [errors, setErrors] = useState<{ phone?: string; idNumber?: string; state?: string }>({});
+  const [errors, setErrors] = useState<{
+    phone?: string;
+    idNumber?: string;
+    state?: string;
+    passportPhoto?: string;
+  }>({});
+
+  const [passportPhoto, setPassportPhoto] = useState<File | null>(null);
+  const [passportPreview, setPassportPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isDraggingPhoto, setIsDraggingPhoto] = useState(false);
+
+  // Revoke the object URL when it's replaced or the component unmounts, so we don't leak memory.
+  useEffect(() => {
+    return () => {
+      if (passportPreview) URL.revokeObjectURL(passportPreview);
+    };
+  }, [passportPreview]);
+
+  const MAX_PHOTO_MB = 5;
+  const ACCEPTED_PHOTO_TYPES = ["image/jpeg", "image/png"];
+
+  function handlePhotoFile(file: File | undefined | null) {
+    if (!file) return;
+    if (!ACCEPTED_PHOTO_TYPES.includes(file.type)) {
+      setErrors((prev) => ({ ...prev, passportPhoto: "Upload a JPG or PNG file." }));
+      return;
+    }
+    if (file.size > MAX_PHOTO_MB * 1024 * 1024) {
+      setErrors((prev) => ({ ...prev, passportPhoto: `File must be under ${MAX_PHOTO_MB}MB.` }));
+      return;
+    }
+    setErrors((prev) => ({ ...prev, passportPhoto: undefined }));
+    if (passportPreview) URL.revokeObjectURL(passportPreview);
+    setPassportPhoto(file);
+    setPassportPreview(URL.createObjectURL(file));
+  }
+
+  function removePhoto() {
+    if (passportPreview) URL.revokeObjectURL(passportPreview);
+    setPassportPhoto(null);
+    setPassportPreview(null);
+    setErrors((prev) => ({ ...prev, passportPhoto: undefined }));
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
 
   const destination = destinations.find((c) => c.code === form.destination)!;
   const isAustralia = destination.code === "AU";
@@ -57,8 +101,13 @@ export default function ApplyPage() {
   function validateStep0() {
     const phoneError = validatePhone(form.phone);
     const idError = validateIdNumber(form.idNumber);
-    if (phoneError || idError) {
-      setErrors({ phone: phoneError ?? undefined, idNumber: idError ?? undefined });
+    const photoError = passportPhoto ? undefined : "Upload a passport photo to continue.";
+    if (phoneError || idError || photoError) {
+      setErrors({
+        phone: phoneError ?? undefined,
+        idNumber: idError ?? undefined,
+        passportPhoto: photoError,
+      });
       return false;
     }
     setErrors({});
@@ -372,6 +421,90 @@ export default function ApplyPage() {
                     />
                   </label>
                 </div>
+
+                <div className="block">
+                  <span className="text-sm font-medium text-night">Passport photo</span>
+                  <p className="mt-1 text-xs text-ink/60">
+                    A recent, colour passport photo on a white background. JPG
+                    or PNG, up to {MAX_PHOTO_MB}MB.
+                  </p>
+
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png"
+                    onChange={(e) => handlePhotoFile(e.target.files?.[0])}
+                    className="hidden"
+                    id="passport-photo-input"
+                  />
+
+                  {passportPreview ? (
+                    <div className="mt-3 flex items-center gap-4 rounded-lg border border-night/15 bg-sand p-4">
+                      <img
+                        src={passportPreview}
+                        alt="Passport photo preview"
+                        className="h-20 w-20 flex-none rounded-md border border-night/10 object-cover"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium text-night">
+                          {passportPhoto?.name}
+                        </p>
+                        <p className="text-xs text-ink/60">
+                          {passportPhoto ? `${(passportPhoto.size / (1024 * 1024)).toFixed(1)}MB` : ""}
+                        </p>
+                        <div className="mt-2 flex gap-4">
+                          <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="text-xs font-semibold text-teal-dark underline decoration-teal/40 underline-offset-4 hover:text-teal"
+                          >
+                            Replace
+                          </button>
+                          <button
+                            type="button"
+                            onClick={removePhoto}
+                            className="text-xs font-semibold text-ink/60 underline decoration-ink/20 underline-offset-4 hover:text-night"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <label
+                      htmlFor="passport-photo-input"
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        setIsDraggingPhoto(true);
+                      }}
+                      onDragLeave={() => setIsDraggingPhoto(false)}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        setIsDraggingPhoto(false);
+                        handlePhotoFile(e.dataTransfer.files?.[0]);
+                      }}
+                      className={`mt-3 flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed px-4 py-8 text-center transition ${
+                        isDraggingPhoto
+                          ? "border-teal bg-teal/5"
+                          : errors.passportPhoto
+                            ? "border-red-400 bg-red-50/40"
+                            : "border-night/20 bg-sand hover:border-teal/50"
+                      }`}
+                    >
+                      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-teal/10 text-teal-dark">
+                        ↑
+                      </span>
+                      <span className="text-sm font-medium text-night">
+                        Click to upload, or drag and drop
+                      </span>
+                      <span className="text-xs text-ink/55">JPG or PNG, up to {MAX_PHOTO_MB}MB</span>
+                    </label>
+                  )}
+
+                  {errors.passportPhoto && (
+                    <p className="mt-1.5 text-xs font-medium text-red-600">{errors.passportPhoto}</p>
+                  )}
+                </div>
               </div>
             )}
 
@@ -482,10 +615,6 @@ export default function ApplyPage() {
                     </select>
                   </label>
                 </div>
-                <p className="rounded-lg bg-teal/10 p-4 text-xs leading-relaxed text-teal-dark">
-                  You&apos;ll also need a passport photo on hand — you can
-                  upload it once our team confirms your checklist.
-                </p>
               </div>
             )}
 

@@ -10,7 +10,7 @@ import {
   eligibleApplicantCountries,
   coreRequirements,
 } from "@/lib/data";
-import { validatePhone, validateIdNumber } from "@/lib/validation";
+import { validateIdNumber } from "@/lib/validation";
 
 type Stage = "form" | "checking" | "result";
 
@@ -32,9 +32,8 @@ export default function CheckEligibilityPage() {
   const [state, setState] = useState("");
   const [purpose, setPurpose] = useState("Hybrid (online + onsite)");
   const [idNumber, setIdNumber] = useState("");
-  const [phone, setPhone] = useState("");
   const [activeStep, setActiveStep] = useState(0);
-  const [errors, setErrors] = useState<{ idNumber?: string; phone?: string; state?: string }>({});
+  const [errors, setErrors] = useState<{ idNumber?: string; state?: string }>({});
 
   const destination = destinations.find((c) => c.code === destinationCode)!;
   const isAustralia = destination.code === "AU";
@@ -43,11 +42,10 @@ export default function CheckEligibilityPage() {
     e.preventDefault();
 
     const idError = validateIdNumber(idNumber);
-    const phoneError = validatePhone(phone);
     const stateError = isAustralia && !state ? "Select a state or territory." : undefined;
 
-    if (idError || phoneError || stateError) {
-      setErrors({ idNumber: idError ?? undefined, phone: phoneError ?? undefined, state: stateError });
+    if (idError || stateError) {
+      setErrors({ idNumber: idError ?? undefined, state: stateError });
       return;
     }
     setErrors({});

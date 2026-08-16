@@ -129,7 +129,7 @@ export const coreRequirements = [
     detail: "An active phone number we can reach you on for verification and updates.",
   },
   {
-    title: "ID number",
+    title: "ID or Passport number",
     detail: "Your national ID or passport number, used to verify your identity.",
   },
   {

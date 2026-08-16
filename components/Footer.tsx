@@ -14,7 +14,7 @@ export default function Footer() {
             </div>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-sand/60">
               Independent guidance and application support for Freelance Visa
-              applicants across the Gulf. We are not a government authority
+              applicants across the Gulf and Australia. We are not a government authority
               or embassy.
             </p>
           </div>
