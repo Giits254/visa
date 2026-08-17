@@ -5,7 +5,7 @@ import { destinations, eligibleApplicantCountries, PROCESSING_FEE_USD, AUSTRALIA
 // NOTE: adjust these keys if your `country.code` values differ from standard ISO codes.
 const countryImages: Record<string, { src: string; alt: string }> = {
   AE: { src: "/countries/dubai.png", alt: "Dubai skyline at dusk" },
-  SA: { src: "/countries/saudi.jpg", alt: "Saudi Arabia cityscape" },
+  KSA: { src: "/countries/saudi.jpg", alt: "Saudi Arabia cityscape" },
   QA: { src: "/countries/qatar.jpg", alt: "Doha skyline along the corniche" },
   KW: { src: "/countries/kuwait.jpg", alt: "Kuwait City waterfront" },
   BH: { src: "/countries/bahrain.jpg", alt: "Manama skyline" },

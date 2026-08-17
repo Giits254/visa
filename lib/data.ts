@@ -44,7 +44,7 @@ export const destinations: Destination[] = [
     notes: "Covers online work for a foreign employer, hybrid arrangements, and onsite freelance work. Passport must be valid 6+ months.",
   },
   {
-    code: "SA",
+    code: "KSA",
     name: "Saudi Arabia",
     visaLabel: "Freelance Visa (eVisa route)",
     validity: "2 years, multiple entry",

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Footer() {
@@ -7,9 +8,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <div className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-gold text-sm font-display font-semibold text-gold">
-                F
-              </span>
+              <Image
+                src="/logo.png"
+                alt="Freelance Visa"
+                width={36}
+                height={36}
+                unoptimized
+                className="h-9 w-9 rounded-full border-2 border-gold object-cover"
+              />
               <span className="font-display text-lg font-semibold text-sand">Freelance Visa</span>
             </div>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-sand/60">
