@@ -8,6 +8,8 @@ type PaymentStepProps = {
   paymentConfirmed: boolean;
   confirmingPayment: boolean;
   onConfirmPayment: () => void;
+  nationality: string;
+  usdToKesRate: number;
 };
 
 export default function PaymentStep({
@@ -16,7 +18,11 @@ export default function PaymentStep({
   paymentConfirmed,
   confirmingPayment,
   onConfirmPayment,
+  nationality,
+  usdToKesRate,
 }: PaymentStepProps) {
+  const isKenya = nationality === "Kenya";
+  const kesAmount = Math.round(destination.feeUSD * usdToKesRate);
   return (
     <div>
       <div className="flex items-center justify-between rounded-xl bg-night px-5 py-4 text-sand">
@@ -25,6 +31,11 @@ export default function PaymentStep({
           <p className="font-mono text-xl font-semibold text-gold">
             ${destination.feeUSD}.00 USD
           </p>
+          {isKenya && (
+            <p className="mt-0.5 font-mono text-sm text-sand/70">
+              ≈ KES {kesAmount.toLocaleString()}
+            </p>
+          )}
         </div>
         <div className="text-right">
           <p className="text-xs uppercase tracking-wider text-sand/60">M-Pesa Till</p>
@@ -37,7 +48,9 @@ export default function PaymentStep({
           "Open the M-Pesa menu on your phone.",
           "Select Lipa na M-Pesa, then Buy Goods and Services.",
           `Enter Till Number ${mpesaTillNumber}.`,
-          `Enter the amount — $${destination.feeUSD} USD, or its KES equivalent at checkout.`,
+          `Enter the amount — $${destination.feeUSD} USD${
+            isKenya ? ` (≈ KES ${kesAmount.toLocaleString()})` : ", or its KES equivalent at checkout"
+          }.`,
           "Enter your M-Pesa PIN and confirm.",
           "You'll get an M-Pesa confirmation message immediately — keep it for your records.",
         ].map((line, i) => (

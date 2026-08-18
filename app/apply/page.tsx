@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { destinations, PROCESSING_FEE_LABEL, MPESA_TILL_NUMBER, DEFAULT_PHONE_COUNTRY } from "@/lib/data";
+import { destinations, PROCESSING_FEE_LABEL, MPESA_TILL_NUMBER, DEFAULT_PHONE_COUNTRY, USD_TO_KES_RATE } from "@/lib/data";
 import { validatePhone, validateIdNumber } from "@/lib/validation";
 
 import { FormErrors, FormState, Stage } from "./_components/types";
@@ -249,6 +249,8 @@ export default function ApplyPage() {
                 paymentConfirmed={paymentConfirmed}
                 confirmingPayment={confirmingPayment}
                 onConfirmPayment={confirmPayment}
+                nationality={form.nationality}
+                usdToKesRate={USD_TO_KES_RATE}
               />
             )}
 

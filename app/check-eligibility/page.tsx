@@ -22,8 +22,8 @@ const checkingSteps = [
   "Compiling your document checklist",
 ];
 
-const STEP_INTERVAL_MS = 1500;
-const STEP_TAIL_MS = 900;
+const STEP_INTERVAL_MS = 3000;
+const STEP_TAIL_MS = 1800;
 
 export default function CheckEligibilityPage() {
   const [stage, setStage] = useState<Stage>("form");

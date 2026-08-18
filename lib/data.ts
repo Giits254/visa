@@ -4,6 +4,7 @@ export const PROCESSING_FEE_USD = 100; // baseline fee (all destinations except 
 export const AUSTRALIA_FEE_USD = 150;
 export const PROCESSING_FEE_LABEL = "Freelance Visa Processing Fee";
 export const MPESA_TILL_NUMBER = "30 93 948";
+export const USD_TO_KES_RATE = 130;
 
 export const freelanceVisaDefinition = {
   heading: "What is a Freelance Visa?",
