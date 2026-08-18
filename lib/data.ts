@@ -3,7 +3,7 @@ export const BRAND_NAME = "Freelance Visa";
 export const PROCESSING_FEE_USD = 100; // baseline fee (all destinations except Australia)
 export const AUSTRALIA_FEE_USD = 150;
 export const PROCESSING_FEE_LABEL = "Freelance Visa Processing Fee";
-export const MPESA_TILL_NUMBER = "867 567";
+export const MPESA_TILL_NUMBER = "30 93 948";
 
 export const freelanceVisaDefinition = {
   heading: "What is a Freelance Visa?",
@@ -118,6 +118,33 @@ export const eligibleApplicantCountries = [
   "Sri Lanka",
   "Indonesia",
 ];
+
+export type PhoneCountry = {
+  name: string;
+  dialCode: string;
+};
+
+// Dial codes for the eligible applicant countries above. Kenya is first/default.
+export const phoneCountries: PhoneCountry[] = [
+  { name: "Kenya", dialCode: "+254" },
+  { name: "Uganda", dialCode: "+256" },
+  { name: "Tanzania", dialCode: "+255" },
+  { name: "Rwanda", dialCode: "+250" },
+  { name: "Ethiopia", dialCode: "+251" },
+  { name: "Nigeria", dialCode: "+234" },
+  { name: "Ghana", dialCode: "+233" },
+  { name: "South Africa", dialCode: "+27" },
+  { name: "Zambia", dialCode: "+260" },
+  { name: "Malawi", dialCode: "+265" },
+  { name: "India", dialCode: "+91" },
+  { name: "Philippines", dialCode: "+63" },
+  { name: "Pakistan", dialCode: "+92" },
+  { name: "Bangladesh", dialCode: "+880" },
+  { name: "Sri Lanka", dialCode: "+94" },
+  { name: "Indonesia", dialCode: "+62" },
+];
+
+export const DEFAULT_PHONE_COUNTRY = "Kenya";
 
 export const coreRequirements = [
   {

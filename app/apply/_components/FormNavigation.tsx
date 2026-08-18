@@ -4,6 +4,7 @@ type FormNavigationProps = {
   paymentConfirmed: boolean;
   onBack: () => void;
   onNext: () => void;
+  onSubmit: () => void;
 };
 
 export default function FormNavigation({
@@ -12,6 +13,7 @@ export default function FormNavigation({
   paymentConfirmed,
   onBack,
   onNext,
+  onSubmit,
 }: FormNavigationProps) {
   const isPaymentStep = step === 2;
   const isLastStep = step === totalSteps - 1;
@@ -42,7 +44,8 @@ export default function FormNavigation({
         </button>
       ) : (
         <button
-          type="submit"
+          type="button"
+          onClick={onSubmit}
           className="flex-1 rounded-full bg-gold px-6 py-3 text-sm font-semibold text-night transition hover:bg-gold-light"
         >
           Submit application

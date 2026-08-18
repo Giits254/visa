@@ -1,4 +1,5 @@
 import { RefObject } from "react";
+import { eligibleApplicantCountries, phoneCountries } from "@/lib/data";
 import { FormErrors, FormState } from "./types";
 
 type ApplicantDetailsStepProps = {
@@ -71,27 +72,6 @@ export default function ApplicantDetailsStep({
           )}
         </label>
         <label className="block">
-          <span className="text-sm font-medium text-night">Phone number</span>
-          <input
-            required
-            type="tel"
-            value={form.phone}
-            onChange={(e) => {
-              update("phone", e.target.value);
-              clearError("phone");
-            }}
-            placeholder="+254 7xx xxx xxx"
-            className={`mt-2 w-full rounded-lg border bg-sand px-4 py-3 text-sm text-ink ${
-              errors.phone ? "border-red-500" : "border-night/25"
-            }`}
-          />
-          {errors.phone && (
-            <p className="mt-1.5 text-xs font-medium text-red-600">{errors.phone}</p>
-          )}
-        </label>
-      </div>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        <label className="block">
           <span className="text-sm font-medium text-night">ID number</span>
           <input
             required
@@ -101,7 +81,6 @@ export default function ApplicantDetailsStep({
               clearError("idNumber");
             }}
             placeholder="ID no."
-            inputMode="numeric"
             className={`mt-2 w-full rounded-lg border bg-sand px-4 py-3 text-sm text-ink ${
               errors.idNumber ? "border-red-500" : "border-night/25"
             }`}
@@ -110,25 +89,67 @@ export default function ApplicantDetailsStep({
             <p className="mt-1.5 text-xs font-medium text-red-600">{errors.idNumber}</p>
           )}
         </label>
-        <label className="block">
-          <span className="text-sm font-medium text-night">Nationality</span>
+      </div>
+
+      <label className="block">
+        <span className="text-sm font-medium text-night">Phone number</span>
+        <div className="mt-2 flex gap-2">
+          <select
+            value={form.phoneCountry}
+            onChange={(e) => update("phoneCountry", e.target.value)}
+            aria-label="Phone country code"
+            className="w-[9.5rem] flex-none rounded-lg border border-night/25 bg-sand px-2 py-3 text-sm text-ink"
+          >
+            {phoneCountries.map((c) => (
+              <option key={c.name} value={c.name}>
+                {c.dialCode} {c.name}
+              </option>
+            ))}
+          </select>
           <input
             required
-            value={form.nationality}
+            type="tel"
+            inputMode="tel"
+            value={form.phone}
             onChange={(e) => {
-              update("nationality", e.target.value);
-              clearError("nationality");
+              update("phone", e.target.value);
+              clearError("phone");
             }}
-            placeholder="e.g. Kenyan"
-            className={`mt-2 w-full rounded-lg border bg-sand px-4 py-3 text-sm text-ink ${
-              errors.nationality ? "border-red-500" : "border-night/25"
+            placeholder="7xx xxx xxx"
+            className={`w-full rounded-lg border bg-sand px-4 py-3 text-sm text-ink ${
+              errors.phone ? "border-red-500" : "border-night/25"
             }`}
           />
-          {errors.nationality && (
-            <p className="mt-1.5 text-xs font-medium text-red-600">{errors.nationality}</p>
-          )}
-        </label>
-      </div>
+        </div>
+        {errors.phone && (
+          <p className="mt-1.5 text-xs font-medium text-red-600">{errors.phone}</p>
+        )}
+      </label>
+
+      <label className="block">
+        <span className="text-sm font-medium text-night">Nationality</span>
+        <select
+          required
+          value={form.nationality}
+          onChange={(e) => {
+            update("nationality", e.target.value);
+            clearError("nationality");
+          }}
+          className={`mt-2 w-full rounded-lg border bg-sand px-4 py-3 text-sm text-ink ${
+            errors.nationality ? "border-red-500" : "border-night/25"
+          }`}
+        >
+          <option value="">Select your nationality</option>
+          {eligibleApplicantCountries.map((country) => (
+            <option key={country} value={country}>
+              {country}
+            </option>
+          ))}
+        </select>
+        {errors.nationality && (
+          <p className="mt-1.5 text-xs font-medium text-red-600">{errors.nationality}</p>
+        )}
+      </label>
 
       <div className="block">
         <span className="text-sm font-medium text-night">Passport photo</span>

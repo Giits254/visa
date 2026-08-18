@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import StampBadge from "@/components/StampBadge";
 import { destinations } from "@/lib/data";
-import { FormState } from "./types";
+import { FormState, formatInternationalPhone } from "./types";
 
 type Destination = (typeof destinations)[number];
 
@@ -82,7 +82,7 @@ export default function InvoiceReceipt({
                 </p>
                 <p className="mt-1 font-medium text-night">{form.fullName || "—"}</p>
                 <p className="text-ink/65">{form.email || "—"}</p>
-                <p className="text-ink/65">{form.phone || "—"}</p>
+                <p className="text-ink/65">{formatInternationalPhone(form.phoneCountry, form.phone) || "—"}</p>
               </div>
               <div>
                 <p className="text-xs font-medium uppercase tracking-wider text-ink/55">

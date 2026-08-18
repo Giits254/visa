@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { destinations, PROCESSING_FEE_LABEL, MPESA_TILL_NUMBER } from "@/lib/data";
+import { destinations, PROCESSING_FEE_LABEL, MPESA_TILL_NUMBER, DEFAULT_PHONE_COUNTRY } from "@/lib/data";
 import { validatePhone, validateIdNumber } from "@/lib/validation";
 
 import { FormErrors, FormState, Stage } from "./_components/types";
@@ -28,6 +28,7 @@ export default function ApplyPage() {
     fullName: "",
     email: "",
     phone: "",
+    phoneCountry: DEFAULT_PHONE_COUNTRY,
     idNumber: "",
     nationality: "",
     destination: destinations[0].code,
@@ -113,7 +114,7 @@ export default function ApplyPage() {
       : /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
         ? undefined
         : "Enter a valid email address.";
-    const nationalityError = form.nationality.trim() ? undefined : "Enter your nationality.";
+    const nationalityError = form.nationality ? undefined : "Select your nationality.";
 
     if (phoneError || idError || photoError || fullNameError || emailError || nationalityError) {
       setErrors({
@@ -157,8 +158,9 @@ export default function ApplyPage() {
     }, 1300);
   }
 
-  function submit(e: React.FormEvent) {
-    e.preventDefault();
+  function submit(e?: React.FormEvent) {
+    e?.preventDefault();
+    if (step !== steps.length - 1) return;
     if (!paymentConfirmed) return;
     setStage("submitting");
     setTimeout(() => setStage("paid"), 1200);
@@ -209,7 +211,7 @@ export default function ApplyPage() {
           <StepIndicator steps={steps} currentStep={step} />
 
           <form
-            onSubmit={step === steps.length - 1 ? submit : (e) => e.preventDefault()}
+            onSubmit={(e) => e.preventDefault()}
             className="rounded-2xl border border-night/10 bg-white p-6 shadow-sm sm:p-8"
           >
             {step === 0 && (
@@ -267,6 +269,7 @@ export default function ApplyPage() {
               paymentConfirmed={paymentConfirmed}
               onBack={back}
               onNext={next}
+              onSubmit={submit}
             />
           </form>
         </section>

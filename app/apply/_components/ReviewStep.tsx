@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { destinations } from "@/lib/data";
-import { FormState } from "./types";
+import { FormState, formatInternationalPhone } from "./types";
 
 type Destination = (typeof destinations)[number];
 
@@ -60,7 +60,7 @@ export default function ReviewStep({
           {[
             ["Full name", form.fullName || "—"],
             ["Email", form.email || "—"],
-            ["Phone", form.phone || "—"],
+            ["Phone", formatInternationalPhone(form.phoneCountry, form.phone) || "—"],
             ["ID number", form.idNumber || "—"],
             ["Nationality", form.nationality || "—"],
           ].map(([label, value]) => (

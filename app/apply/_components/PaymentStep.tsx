@@ -50,11 +50,6 @@ export default function PaymentStep({
         ))}
       </ol>
 
-      <p className="mt-6 rounded-lg bg-gold/10 p-4 text-xs leading-relaxed text-gold-dark">
-        Bank transfer and card payment are coming soon. For now,
-        M-Pesa Buy Goods is the only supported payment method.
-      </p>
-
       <div className="mt-6 border-t border-dashed border-night/15 pt-6">
         {paymentConfirmed ? (
           <div className="flex items-center gap-3 rounded-lg bg-success/10 p-4">
