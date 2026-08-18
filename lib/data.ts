@@ -241,15 +241,15 @@ export const faqs = [
   },
   {
     q: "Can I work for a company back home on a Freelance Visa?",
-    a: "Yes. That's the core purpose of the Freelance Visa — it explicitly permits earning income from clients or an employer outside the country, whether you work online, onsite, or in a hybrid mix of the two.",
+    a: "Yes. Freelance Visa explicitly permits earning income from clients or an employer outside the country, whether you work online, onsite, or in a hybrid mix of the two.",
   },
   {
     q: "What information do I need for the eligibility check?",
-    a: "Your nationality, destination, work style, ID number and phone number — plus your state or territory if you're applying for Australia. These let us confirm the Freelance Visa route that applies to you and generate your document checklist.",
+    a: "Your nationality, destination, work style, ID number or Passport number  — plus your state or territory if you're applying for Australia. These let us confirm the Freelance Visa route that applies to you and generate your document checklist.",
   },
   {
     q: "How do I pay the processing fee?",
-    a: "Currently via M-Pesa: during your application, you'll see our Buy Goods till number and simple steps to complete payment before you submit. Bank and card payment are coming soon. Once paid, you'll receive a confirmation and a reference number for tracking.",
+    a: "Currently via M-Pesa: during your application, you'll see our Buy Goods till number and simple steps to complete payment before you submit. Once paid, you'll receive a confirmation and a reference number for tracking.",
   },
   {
     q: "Can I cancel my application?",
