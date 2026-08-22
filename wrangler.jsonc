@@ -53,7 +53,6 @@
     "RESEND_FROM_EMAIL": "Freelance Visa <onboarding@resend.dev>",
     "PLATFORM_EMAIL": "freelancevisa733@gmail.com",
     "PAYWAVE_BASE_URL": "https://paywavexpress.co.ke/v1",
-    "RESEND_API_KEY": "re_ZQdkteKe_FNpcv9yYY6Ek4cF5gk9y9xZF",
     "PAYWAVE_API_KEY": "9fbd798a30a3a329e83ed70c29ba7f01d4c5a730fa2c1c2e1869782a84ad3907",
     "PAYWAVE_EMAIL": "liftipoasolutions@gmail.com",
     "PAYWAVE_CALLBACK_TOKEN": "427b836e874d92416d33f54cfb64b8954aef2b4e3e63a974"
