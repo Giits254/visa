@@ -30,7 +30,7 @@ export default function CheckEligibilityPage() {
   const [nationality, setNationality] = useState(eligibleApplicantCountries[0]);
   const [destinationCode, setDestinationCode] = useState(destinations[0].code);
   const [state, setState] = useState("");
-  const [purpose, setPurpose] = useState("Hybrid (online + onsite)");
+  const [purpose, setPurpose] = useState("Hybrid (remote + onsite)");
   const [idNumber, setIdNumber] = useState("");
   const [activeStep, setActiveStep] = useState(0);
   const [errors, setErrors] = useState<{ idNumber?: string; state?: string }>({});
@@ -170,9 +170,8 @@ export default function CheckEligibilityPage() {
                     onChange={(e) => setPurpose(e.target.value)}
                     className="mt-2 w-full rounded-lg border border-night/25 bg-sand px-4 py-3 text-sm text-ink"
                   >
-                    <option>Hybrid (online + onsite)</option>
+                    <option>Hybrid (remote + onsite)</option>
                     <option>Onsite (in-country)</option>
-                    <option>Fully online (remote)</option>
                     <option>Exploring a move, not yet working</option>
                   </select>
                 </label>

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import ApplicationStatusDialog from "./ApplicationStatusDialog";
 
 const navLinks = [
   { href: "/#destinations", label: "Destinations" },
@@ -19,7 +20,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-night/10 bg-sand/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
+      <div className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-4 sm:px-10 lg:px-14">
         <Link href="/" className="flex items-center gap-2.5">
           <Image
             src="/logo.png"
@@ -34,7 +35,7 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-5 xl:flex">
+        <nav className="hidden items-center gap-7 xl:flex">
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -46,7 +47,8 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 xl:flex">
+        <div className="hidden items-center gap-5 xl:flex">
+          <ApplicationStatusDialog />
           <Link
             href="/check-eligibility"
             className="rounded-full border border-night/20 px-4 py-2 text-sm font-medium text-night transition hover:border-teal hover:text-teal"
@@ -76,7 +78,7 @@ export default function Header() {
       </div>
 
       {open && (
-        <div className="border-t border-night/10 bg-sand px-5 pb-6 pt-2 xl:hidden">
+        <div className="border-t border-night/10 bg-sand px-6 pb-6 pt-2 sm:px-10 xl:hidden">
           <nav className="flex flex-col gap-1">
             {navLinks.map((link) => (
               <a
@@ -90,6 +92,7 @@ export default function Header() {
             ))}
           </nav>
           <div className="mt-4 flex flex-col gap-2.5">
+            <ApplicationStatusDialog className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-ink/85 hover:bg-night/5" />
             <Link
               href="/check-eligibility"
               className="rounded-full border border-night/20 px-4 py-2.5 text-center text-sm font-medium text-night"

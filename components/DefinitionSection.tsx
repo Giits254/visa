@@ -15,7 +15,7 @@ export default function DefinitionSection() {
         </p>
         <div className="mt-6 flex flex-wrap gap-2.5">
           <span className="rounded-full bg-white/70 px-3.5 py-1.5 text-xs font-medium text-ink/80">
-            Works with any style: onsite, hybrid, or online
+            Works with any style: remotely, hybrid, or online
           </span>
           <span className="rounded-full bg-white/70 px-3.5 py-1.5 text-xs font-medium text-ink/80">
             No local sponsor required

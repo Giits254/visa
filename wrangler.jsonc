@@ -1,0 +1,72 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // This name becomes part of your default *.workers.dev URL and is how
+  // this Worker shows up in the Cloudflare dashboard. Change it to match
+  // whatever project name you want to use (it does not need to match an
+  // existing Pages project — deploying here creates/updates a Worker).
+  "name": "manara-visas",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-08-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+
+  // Serves the static site (everything Next.js would otherwise export)
+  // directly from the Worker.
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "manara-visas"
+    }
+  ],
+
+  // The applications database.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "freelancevisa",
+      "database_id": "e7f21bdc-322f-4e13-9c08-5fe7c28992f4"
+    }
+  ],
+
+  // Non-secret configuration. Real secrets (API keys) are set with
+  // `wrangler secret put <NAME>` instead — see README.md.
+  "vars": {
+    "RESEND_FROM_EMAIL": "Freelance Visa <hello@freelancevisa.co>",
+    "PLATFORM_EMAIL": "freelancevisa733@gmail.com",
+    "PAYWAVE_BASE_URL": "https://paywavexpress.co.ke/v1"
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

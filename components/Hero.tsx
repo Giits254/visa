@@ -31,11 +31,11 @@ export default function Hero() {
       />
       <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-5 py-16 sm:px-8 sm:py-24 lg:grid-cols-[1.15fr_0.85fr] lg:py-28">
         <div className="animate-rise">
-          <p className="font-mono text-xs uppercase tracking-[0.25em] text-gold-dark">
-            Freelance Visa
-          </p>
+        <p className="font-mono text-lg uppercase tracking-[0.25em] text-gold-dark">
+        Freelance Visa
+      </p>
           <h1 className="mt-5 font-display text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.4rem]">
-            <span className="text-gold-dark">Move And Work Abroad.</span>
+            <span className="text-gold-dark">Working Abroad Made Easier.</span>
             <br />
             <span className="text-night">Your Freelance Visa Journey, Simplified</span>
           </h1>

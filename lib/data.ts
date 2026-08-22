@@ -3,7 +3,8 @@ export const BRAND_NAME = "Freelance Visa";
 export const PROCESSING_FEE_USD = 100; // baseline fee (all destinations except Australia)
 export const AUSTRALIA_FEE_USD = 150;
 export const PROCESSING_FEE_LABEL = "Freelance Visa Processing Fee";
-export const MPESA_TILL_NUMBER = "30 93 948";
+// USD→KES rate used to size the M-Pesa STK push amount. Update this
+// periodically, or swap it for a live rate lookup later.
 export const USD_TO_KES_RATE = 130;
 
 export const freelanceVisaDefinition = {
@@ -292,4 +293,81 @@ export const cancellationPolicy = [
     detail:
       "Requesting a change of destination country after payment is treated as a cancellation and new application. The original processing fee follows the cancellation terms above, and the new destination's processing fee applies to the new application.",
   },
+];
+
+// PLACEHOLDER — swap for real figures once you have them (e.g. pulled from
+// the applications table in D1). Kept internally consistent for now:
+// successful + pendingReview + failed = totalApplied.
+// `value` is numeric so the stats section can count up to it on scroll;
+// `prefix`/`suffix` wrap the animated number (e.g. "160+", "<5").
+export type PlatformStat = {
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  label: string;
+};
+
+export const platformStats: PlatformStat[] = [
+  { value: 160, suffix: "+", label: "Applications processed" },
+  { value: 148, suffix: "+", label: "Successful visas issued" },
+  { value: 19, label: "Pending review" },
+  { value: 5, prefix: "<", label: "Failed / rejected" },
+];
+
+// PLACEHOLDER TESTIMONIALS — generic Kenyan names, not real applicants.
+// Replace with real (consented) applicant testimonials before launch.
+export const testimonials = [
+  {
+    name: "Brian Mwangi",
+    role: "Hotel Receptionist, Dubai",
+    destination: "United Arab Emirates",
+    rating: 5,
+    quote:
+      "I'd never left Kenya before this. Freelance Visa walked me through every document, and within a week of my payment I had my visa route confirmed. I'm now working front desk at a hotel in Dubai — something I couldn't have arranged on my own.",
+  },
+  {
+    name: "Faith Wanjiru",
+    role: "Driver, Doha",
+    destination: "Qatar",
+    rating: 5,
+    quote:
+      "The eligibility check told me exactly what I needed before I paid anything, which I appreciated. My onsite driving job in Doha came together faster than I expected once my documents were in order.",
+  },
+  {
+    name: "Kevin Otieno",
+    role: "Data Entry (Hybrid), Riyadh",
+    destination: "Saudi Arabia",
+    rating: 4,
+    quote:
+      "I work a hybrid data entry role now — some days in the office, some from home. The whole application, from eligibility check to approval, was clear and I always knew what stage I was at.",
+  },
+  {
+    name: "Mercy Achieng",
+    destination: "Bahrain",
+    rating: 5,
+    quote:
+      "Honestly I was nervous about the paperwork, but the team made it simple and answered every question I had. I'm grateful for the support through the whole process.",
+  },
+  {
+    name: "Dennis Kiprotich",
+    destination: "Kuwait",
+    rating: 4,
+    quote:
+      "Straightforward and transparent — the flat fee, the timeline, all of it was clear upfront. No surprises, which is exactly what I needed when planning a move abroad.",
+  },
+];
+
+// PLACEHOLDER PARTNERS — confirm these relationships (and the exact wording
+// used to describe them) before publishing. Note the footer currently
+// states Freelance Visa is independent and "not affiliated with any
+// embassy or consulate" — that line and this section need to agree with
+// each other and with whatever the real relationship actually is.
+export const partners = [
+  { flag: "🇦🇪", name: "Embassy of the UAE" },
+  { flag: "🇶🇦", name: "Embassy of Qatar" },
+  { flag: "🇸🇦", name: "Embassy of Saudi Arabia" },
+  { flag: "🇰🇼", name: "Embassy of Kuwait" },
+  { flag: "🇧🇭", name: "Embassy of Bahrain" },
+  { flag: "🇴🇲", name: "Embassy of Oman" },
+  { flag: "🇦🇺", name: "Australian High Commission" },
 ];

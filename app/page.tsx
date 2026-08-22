@@ -1,12 +1,15 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
+import StatsSection from "@/components/StatsSection";
 import DefinitionSection from "@/components/DefinitionSection";
+import PartnersSection from "@/components/PartnersSection";
 import CountriesGrid from "@/components/CountriesGrid";
 import RequirementsSection from "@/components/RequirementsSection";
 import ProcessTimeline from "@/components/ProcessTimeline";
-import TipsSection from "@/components/TipsSection";
 import TravelInfoSection from "@/components/TravelInfoSection";
+import TipsSection from "@/components/TipsSection";
+import TestimonialsSection from "@/components/TestimonialsSection";
 import FAQSection from "@/components/FAQSection";
 import Link from "next/link";
 
@@ -16,12 +19,14 @@ export default function HomePage() {
       <Header />
       <main>
         <Hero />
+        <StatsSection />
         <DefinitionSection />
         <CountriesGrid />
         <RequirementsSection />
         <ProcessTimeline />
         <TravelInfoSection />
         <TipsSection />
+        <TestimonialsSection />
         <FAQSection />
 
         <section className="mx-auto max-w-6xl px-5 pb-24 sm:px-8">
@@ -44,6 +49,7 @@ export default function HomePage() {
           </div>
         </section>
       </main>
+      <PartnersSection />
       <Footer />
     </>
   );

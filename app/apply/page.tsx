@@ -3,14 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { destinations, PROCESSING_FEE_LABEL, MPESA_TILL_NUMBER, DEFAULT_PHONE_COUNTRY, USD_TO_KES_RATE } from "@/lib/data";
+import { destinations, PROCESSING_FEE_LABEL, DEFAULT_PHONE_COUNTRY, USD_TO_KES_RATE } from "@/lib/data";
 import { validatePhone, validateIdNumber } from "@/lib/validation";
 
-import { FormErrors, FormState, Stage } from "./_components/types";
+import { FormErrors, FormState, Stage, formatInternationalPhone } from "./_components/types";
 import StepIndicator from "./_components/StepIndicator";
 import ApplicantDetailsStep from "./_components/ApplicantDetailsStep";
 import AddressDocumentsStep from "./_components/AddressDocumentsStep";
-import PaymentStep from "./_components/PaymentStep";
+import PaymentStep, { PaymentState } from "./_components/PaymentStep";
 import ReviewStep from "./_components/ReviewStep";
 import FormNavigation from "./_components/FormNavigation";
 import SubmittingScreen from "./_components/SubmittingScreen";
@@ -18,11 +18,21 @@ import InvoiceReceipt from "./_components/InvoiceReceipt";
 
 const steps = ["Applicant details", "Address & documents", "Payment", "Review & submit"];
 
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      resolve(result.split(",")[1] ?? result);
+    };
+    reader.onerror = () => reject(reader.error ?? new Error("Could not read file."));
+    reader.readAsDataURL(file);
+  });
+}
+
 export default function ApplyPage() {
   const [step, setStep] = useState(0);
   const [stage, setStage] = useState<Stage>("form");
-  const [confirmingPayment, setConfirmingPayment] = useState(false);
-  const [paymentConfirmed, setPaymentConfirmed] = useState(false);
 
   const [form, setForm] = useState<FormState>({
     fullName: "",
@@ -34,7 +44,7 @@ export default function ApplyPage() {
     destination: destinations[0].code,
     state: "",
     travelDate: "",
-    purpose: "Hybrid (online + onsite)",
+    purpose: "Hybrid (remote + onsite)",
     street: "",
     city: "",
     zip: "",
@@ -46,6 +56,15 @@ export default function ApplyPage() {
   const [passportPreview, setPassportPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDraggingPhoto, setIsDraggingPhoto] = useState(false);
+
+  // Payment (STK push) state
+  const [paymentState, setPaymentState] = useState<PaymentState>("idle");
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [referenceCode, setReferenceCode] = useState<string | null>(null);
+  const [transactionReceipt, setTransactionReceipt] = useState<string | null>(null);
+
+  // Final submit
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Revoke the object URL when it's replaced or the component unmounts, so we don't leak memory.
   useEffect(() => {
@@ -87,10 +106,8 @@ export default function ApplyPage() {
 
   const destination = destinations.find((c) => c.code === form.destination)!;
   const isAustralia = destination.code === "AU";
+  const paymentConfirmed = paymentState === "paid";
 
-  const [refNumber] = useState(
-    () => "FLV-" + Math.floor(100000 + Math.random() * 900000)
-  );
   const [invoiceNumber] = useState(
     () => "INV-" + new Date().getFullYear() + "-" + Math.floor(1000 + Math.random() * 9000)
   );
@@ -150,33 +167,115 @@ export default function ApplyPage() {
     setStep((s) => Math.max(s - 1, 0));
   }
 
-  function confirmPayment() {
-    setConfirmingPayment(true);
-    setTimeout(() => {
-      setConfirmingPayment(false);
-      setPaymentConfirmed(true);
-    }, 1300);
+  async function makePayment() {
+    setPaymentError(null);
+    setPaymentState("initiating");
+    try {
+      const res = await fetch("/api/payment/initiate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: form.fullName,
+          email: form.email,
+          phoneCountry: form.phoneCountry,
+          phone: form.phone,
+          idNumber: form.idNumber,
+          nationality: form.nationality,
+          destinationCode: form.destination,
+          street: form.street,
+          city: form.city,
+          zip: form.zip,
+          state: form.state,
+          travelDate: form.travelDate,
+          purpose: form.purpose,
+        }),
+      });
+      const data = (await res.json()) as { referenceCode?: string; error?: string };
+      if (!res.ok || !data.referenceCode) throw new Error(data.error || "Could not start payment.");
+      setReferenceCode(data.referenceCode);
+      setPaymentState("awaiting_payment");
+    } catch (err) {
+      setPaymentError(err instanceof Error ? err.message : "Could not start payment.");
+      setPaymentState("failed");
+    }
   }
 
-  function submit(e?: React.FormEvent) {
+  // Poll for the STK push result while we're waiting on it.
+  useEffect(() => {
+    if (paymentState !== "awaiting_payment" || !referenceCode) return;
+    let cancelled = false;
+
+    async function poll() {
+      try {
+        const res = await fetch(`/api/payment/status?ref=${encodeURIComponent(referenceCode!)}`);
+        const data = (await res.json()) as {
+          status?: string;
+          transactionReceipt?: string | null;
+          responseDescription?: string | null;
+        };
+        if (cancelled) return;
+        if (data.status === "paid" || data.status === "submitted") {
+          setTransactionReceipt(data.transactionReceipt ?? null);
+          setPaymentState("paid");
+        } else if (data.status === "payment_failed") {
+          setPaymentError(data.responseDescription || "The payment attempt failed.");
+          setPaymentState("failed");
+        } else if (data.status === "payment_cancelled") {
+          setPaymentState("cancelled");
+        }
+        // otherwise still awaiting_payment — keep polling
+      } catch {
+        // network hiccup — try again on the next tick
+      }
+    }
+
+    poll();
+    const interval = setInterval(poll, 3000);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, [paymentState, referenceCode]);
+
+  async function submit(e?: React.FormEvent) {
     e?.preventDefault();
     if (step !== steps.length - 1) return;
-    if (!paymentConfirmed) return;
+    if (!paymentConfirmed || !referenceCode) return;
+
+    setSubmitError(null);
     setStage("submitting");
-    setTimeout(() => setStage("paid"), 1200);
+
+    try {
+      const passportPhotoPayload = passportPhoto
+        ? { filename: passportPhoto.name, contentBase64: await fileToBase64(passportPhoto) }
+        : null;
+
+      const res = await fetch("/api/application/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ referenceCode, passportPhoto: passportPhotoPayload }),
+      });
+      const data = (await res.json()) as { transactionReceipt?: string | null; error?: string };
+      if (!res.ok) throw new Error(data.error || "Could not submit your application.");
+      if (data.transactionReceipt) setTransactionReceipt(data.transactionReceipt);
+      setStage("paid");
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Could not submit your application. Please try again.");
+      setStage("form");
+    }
   }
 
   // ---------- PAID / INVOICE ----------
-  if (stage === "paid") {
+  if (stage === "paid" && referenceCode) {
     return (
       <InvoiceReceipt
         form={form}
         destination={destination}
         isAustralia={isAustralia}
-        refNumber={refNumber}
+        refNumber={referenceCode}
         invoiceNumber={invoiceNumber}
         today={today}
-        mpesaTillNumber={MPESA_TILL_NUMBER}
+        transactionReceipt={transactionReceipt}
         processingFeeLabel={PROCESSING_FEE_LABEL}
       />
     );
@@ -245,12 +344,11 @@ export default function ApplyPage() {
             {step === 2 && (
               <PaymentStep
                 destination={destination}
-                mpesaTillNumber={MPESA_TILL_NUMBER}
-                paymentConfirmed={paymentConfirmed}
-                confirmingPayment={confirmingPayment}
-                onConfirmPayment={confirmPayment}
-                nationality={form.nationality}
                 usdToKesRate={USD_TO_KES_RATE}
+                phoneDisplay={formatInternationalPhone(form.phoneCountry, form.phone)}
+                paymentState={paymentState}
+                errorMessage={paymentError}
+                onMakePayment={makePayment}
               />
             )}
 
@@ -261,6 +359,8 @@ export default function ApplyPage() {
                 isAustralia={isAustralia}
                 passportPreview={passportPreview}
                 processingFeeLabel={PROCESSING_FEE_LABEL}
+                referenceCode={referenceCode}
+                submitError={submitError}
                 onEditStep={setStep}
               />
             )}

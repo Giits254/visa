@@ -1,0 +1,19 @@
+# Copy this file to `.dev.vars` (gitignored) and fill in real values for
+# local development. In production these are set with:
+#   npx wrangler secret put RESEND_API_KEY
+#   npx wrangler secret put PAYWAVE_API_KEY
+#   npx wrangler secret put PAYWAVE_EMAIL
+#   npx wrangler secret put PAYWAVE_CALLBACK_TOKEN
+
+# https://resend.com — API key from your Resend dashboard.
+RESEND_API_KEY=re_your_resend_api_key
+
+# Your Paywave Express account credentials.
+PAYWAVE_API_KEY=your_paywave_api_key
+PAYWAVE_EMAIL=your@email.com
+
+# Any long random string you make up yourself — appended as ?token=...
+# to the callback URL you register with Paywave, so /api/payment/callback
+# can reject requests that don't know it. Generate one with e.g.:
+#   openssl rand -hex 24
+PAYWAVE_CALLBACK_TOKEN=change_me_to_a_long_random_string

@@ -9,7 +9,7 @@ type ApplicantDetailsStepProps = {
   clearError: (key: keyof FormErrors) => void;
   passportPhoto: File | null;
   passportPreview: string | null;
-  fileInputRef: RefObject<HTMLInputElement>;
+  fileInputRef: RefObject<HTMLInputElement | null>;
   isDraggingPhoto: boolean;
   setIsDraggingPhoto: (dragging: boolean) => void;
   handlePhotoFile: (file: File | undefined | null) => void;
@@ -42,7 +42,7 @@ export default function ApplicantDetailsStep({
             update("fullName", e.target.value);
             clearError("fullName");
           }}
-          placeholder="As shown on your passport"
+          placeholder="As shown on your ID or passport "
           className={`mt-2 w-full rounded-lg border bg-sand px-4 py-3 text-sm text-ink ${
             errors.fullName ? "border-red-500" : "border-night/25"
           }`}

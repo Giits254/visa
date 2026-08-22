@@ -30,6 +30,7 @@ export default function Footer() {
               Destinations
             </p>
             <ul className="mt-4 space-y-2.5 text-sm text-sand/70">
+              <li>Australia</li>
               <li>United Arab Emirates</li>
               <li>Saudi Arabia</li>
               <li>Qatar</li>
@@ -63,7 +64,7 @@ export default function Footer() {
               <li>Nairobi, Kenya</li>
               <li>hello@freelancevisa.co</li>
               <li>+254 700 000 000</li>
-              <li>Mon–Fri, 8:00–17:00 EAT</li>
+              <li>Mon–Fri, 0800 hrs–1700 hrs EAT</li>
             </ul>
           </div>
         </div>

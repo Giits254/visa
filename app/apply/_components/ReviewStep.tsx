@@ -10,6 +10,8 @@ type ReviewStepProps = {
   isAustralia: boolean;
   passportPreview: string | null;
   processingFeeLabel: string;
+  referenceCode: string | null;
+  submitError: string | null;
   onEditStep: (step: number) => void;
 };
 
@@ -19,6 +21,8 @@ export default function ReviewStep({
   isAustralia,
   passportPreview,
   processingFeeLabel,
+  referenceCode,
+  submitError,
   onEditStep,
 }: ReviewStepProps) {
   return (
@@ -112,6 +116,18 @@ export default function ReviewStep({
           ${destination.feeUSD}.00 USD
         </span>
       </div>
+
+      {referenceCode && (
+        <p className="mt-4 text-center text-xs text-ink/60">
+          Reference / tracking code:{" "}
+          <span className="font-mono font-semibold text-night">{referenceCode}</span>
+        </p>
+      )}
+
+      {submitError && (
+        <p className="mt-4 rounded-lg bg-red-50 p-3 text-xs font-medium text-red-600">{submitError}</p>
+      )}
+
       <p className="mt-4 text-xs leading-relaxed text-ink/60">
         By submitting, you agree to our{" "}
         <Link href="/cancellation-policy" className="underline hover:text-teal">

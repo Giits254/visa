@@ -28,7 +28,7 @@ export default function AboutPage() {
               We started Freelance Visa from Nairobi after watching too many
               remote workers and freelancers get tangled in visa processes
               built for tourists or in-country employees — neither of which
-              describes someone earning a living online, onsite, or in a
+              describes someone earning a living remotely, onsite, or in a
               hybrid mix of both while based abroad.
             </p>
             <p>
@@ -66,7 +66,7 @@ export default function AboutPage() {
           <div className="mt-12 flex flex-col gap-3 rounded-2xl border border-night/10 bg-gold/10 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
             <div>
               <p className="font-display text-lg font-semibold text-night">
-                Have questions before you start?
+                Do you have any question before you start?
               </p>
               <p className="mt-1 text-sm text-ink/70">
                 Reach out — we're happy to talk through your situation.

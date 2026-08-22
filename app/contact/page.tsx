@@ -7,19 +7,31 @@ import Footer from "@/components/Footer";
 export default function ContactPage() {
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", email: "", message: "" });
 
   function update<K extends keyof typeof form>(key: K, value: string) {
     setForm((f) => ({ ...f, [key]: value }));
   }
 
-  function submit(e: React.FormEvent) {
+  async function submit(e: React.FormEvent) {
     e.preventDefault();
     setSending(true);
-    setTimeout(() => {
-      setSending(false);
+    setError(null);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = (await res.json()) as { error?: string };
+      if (!res.ok) throw new Error(data.error || "Could not send your message.");
       setSent(true);
-    }, 900);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not send your message.");
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -52,7 +64,7 @@ export default function ContactPage() {
             <div className="rounded-2xl border border-night/10 bg-white p-6">
               <p className="text-xs font-medium uppercase tracking-wider text-ink/60">Phone</p>
               <p className="mt-1 font-display text-base font-semibold text-night">
-                +254 700 000 000
+                +254 718 253 265
               </p>
             </div>
             <div className="rounded-2xl border border-night/10 bg-white p-6">
@@ -60,7 +72,7 @@ export default function ContactPage() {
               <p className="mt-1 font-display text-base font-semibold text-night">
                 Nairobi, Kenya
               </p>
-              <p className="mt-1 text-sm text-ink/70">Mon–Fri, 8:00–17:00 EAT</p>
+              <p className="mt-1 text-sm text-ink/70">Mon–Fri, 0800 hrs–1700 hrs EAT</p>
             </div>
           </div>
 
@@ -109,6 +121,9 @@ export default function ContactPage() {
                     className="mt-2 w-full rounded-lg border border-night/20 bg-sand px-4 py-3 text-sm text-ink"
                   />
                 </label>
+                {error && (
+                  <p className="rounded-lg bg-red-50 p-3 text-xs font-medium text-red-600">{error}</p>
+                )}
                 <button
                   type="submit"
                   disabled={sending}

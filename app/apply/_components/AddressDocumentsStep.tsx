@@ -121,9 +121,8 @@ export default function AddressDocumentsStep({
             onChange={(e) => update("purpose", e.target.value)}
             className="mt-2 w-full rounded-lg border border-night/25 bg-sand px-4 py-3 text-sm text-ink"
           >
-            <option>Hybrid (online + onsite)</option>
+            <option>Hybrid (remote + onsite)</option>
             <option>Onsite (in-country)</option>
-            <option>Fully online (remote)</option>
           </select>
         </label>
       </div>

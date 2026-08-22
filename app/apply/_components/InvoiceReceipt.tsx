@@ -14,7 +14,7 @@ type InvoiceReceiptProps = {
   refNumber: string;
   invoiceNumber: string;
   today: string;
-  mpesaTillNumber: string | number;
+  transactionReceipt: string | null;
   processingFeeLabel: string;
 };
 
@@ -25,7 +25,7 @@ export default function InvoiceReceipt({
   refNumber,
   invoiceNumber,
   today,
-  mpesaTillNumber,
+  transactionReceipt,
   processingFeeLabel,
 }: InvoiceReceiptProps) {
   return (
@@ -127,8 +127,8 @@ export default function InvoiceReceipt({
             </table>
 
             <p className="mt-6 text-xs leading-relaxed text-ink/60">
-              Paid via M-Pesa, Till {mpesaTillNumber}. This receipt confirms
-              payment of the {processingFeeLabel.toLowerCase()} only —
+              Paid via M-Pesa (STK Push){transactionReceipt ? `, receipt ${transactionReceipt}` : ""}.
+              This receipt confirms payment of the {processingFeeLabel.toLowerCase()} only —
               it is not a Freelance Visa issuance guarantee. See our{" "}
               <Link href="/cancellation-policy" className="underline hover:text-teal">
                 Cancellation Policy

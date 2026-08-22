@@ -2,4 +2,8 @@ node_modules
 .next
 out
 .env*
+.dev.vars
+.open-next
+.wrangler
+*.tsbuildinfo
 .DS_Store
