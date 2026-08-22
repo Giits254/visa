@@ -309,9 +309,9 @@ export type PlatformStat = {
 
 export const platformStats: PlatformStat[] = [
   { value: 160, suffix: "+", label: "Applications processed" },
-  { value: 148, suffix: "+", label: "Successful visas issued" },
+  { value: 141, suffix: "+", label: "Successful visas issued" },
   { value: 19, label: "Pending review" },
-  { value: 5, prefix: "<", label: "Failed / rejected" },
+  { value: 0, prefix: "<", label: "Failed / rejected" },
 ];
 
 // PLACEHOLDER TESTIMONIALS — generic Kenyan names, not real applicants.

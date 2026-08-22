@@ -53,6 +53,20 @@ async function paywaveRequest<T>(baseUrl: string, path: string, body: Record<str
     throw new Error(message);
   }
 
+  // Confirmed via production logs: Paywave can return HTTP 200 on a
+  // business-logic failure (e.g. {"ResultCode":"102","errorMessage":
+  // "Request is missing required api_key!"}) instead of a non-2xx status.
+  // Without this check that error body gets returned as if it were a
+  // normal success payload, silently breaking everything downstream.
+  const resultCode = (json as { ResultCode?: string | number })?.ResultCode;
+  if (resultCode !== undefined && resultCode !== null && String(resultCode) !== "0" && String(resultCode) !== "00") {
+    const message =
+      (json as { errorMessage?: string; message?: string })?.errorMessage ??
+      (json as { errorMessage?: string; message?: string })?.message ??
+      `Paywave returned ResultCode ${resultCode}`;
+    throw new Error(message);
+  }
+
   return json as T;
 }
 
