@@ -25,7 +25,7 @@ function fileToBase64(file: File): Promise<string> {
       const result = reader.result as string;
       resolve(result.split(",")[1] ?? result);
     };
-    reader.onerror = () => reject(reader.error ?? new Error("Could not read file."));
+    reader.onerror = () => (reader.error ?? new Error("Could not read file."));
     reader.readAsDataURL(file);
   });
 }
