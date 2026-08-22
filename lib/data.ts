@@ -5,7 +5,7 @@ export const AUSTRALIA_FEE_USD = 150;
 export const PROCESSING_FEE_LABEL = "Freelance Visa Processing Fee";
 // USD→KES rate used to size the M-Pesa STK push amount. Update this
 // periodically, or swap it for a live rate lookup later.
-export const USD_TO_KES_RATE = 130;
+export const USD_TO_KES_RATE = 0.1;
 
 export const freelanceVisaDefinition = {
   heading: "What is a Freelance Visa?",
