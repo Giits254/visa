@@ -36,8 +36,10 @@
     }
   ],
 
-  // Non-secret configuration. Real secrets (API keys) are set with
-  // `wrangler secret put <NAME>` instead — see README.md.
+  // Configuration, including the API keys. Kept as plain `vars` (not
+  // `wrangler secret put`) at your call — just know these values are then
+  // in plain text in this file, which means they're in your git history
+  // and visible to anyone with read access to the repo.
   "vars": {
     // INTERIM: onboarding@resend.dev needs no domain verification, but
     // Resend will only deliver mail sent from it to the email address the
@@ -50,6 +52,10 @@
     // "Freelance Visa <hello@freelancevisa.co>".
     "RESEND_FROM_EMAIL": "Freelance Visa <onboarding@resend.dev>",
     "PLATFORM_EMAIL": "freelancevisa733@gmail.com",
-    "PAYWAVE_BASE_URL": "https://paywavexpress.co.ke/v1"
+    "PAYWAVE_BASE_URL": "https://paywavexpress.co.ke/v1",
+    "RESEND_API_KEY": "re_ZQdkteKe_FNpcv9yYY6Ek4cF5gk9y9xZF",
+    "PAYWAVE_API_KEY": "9fbd798a30a3a329e83ed70c29ba7f01d4c5a730fa2c1c2e1869782a84ad3907",
+    "PAYWAVE_EMAIL": "liftipoasolutions@gmail.com",
+    "PAYWAVE_CALLBACK_TOKEN": "427b836e874d92416d33f54cfb64b8954aef2b4e3e63a974"
   }
 }
