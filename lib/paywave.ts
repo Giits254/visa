@@ -31,6 +31,20 @@ async function paywaveRequest<T>(baseUrl: string, path: string, body: Record<str
     throw new Error(`Paywave returned a non-JSON response (${response.status}): ${text.slice(0, 300)}`);
   }
 
+  // Debug: log Paywave's ACTUAL raw response shape. Our field-name
+  // assumptions (transaction_request_id, checkout_request_id, ...) came
+  // from sample code, not confirmed live docs — this makes the real
+  // response body visible in `wrangler tail` / Observability so those
+  // assumptions can be checked against reality. api_key is only ever sent
+  // in the request, never expected back, but stripped here just in case
+  // some endpoint echoes the request body.
+  const forLog =
+    json && typeof json === "object" ? { ...(json as Record<string, unknown>) } : json;
+  if (forLog && typeof forLog === "object" && "api_key" in forLog) {
+    (forLog as Record<string, unknown>).api_key = "[redacted]";
+  }
+  console.log(`Paywave ${path} raw response (status ${response.status}):`, JSON.stringify(forLog));
+
   if (!response.ok) {
     const message =
       (json as { message?: string; error?: string })?.message ??
