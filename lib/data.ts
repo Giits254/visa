@@ -225,7 +225,7 @@ export const tips = [
 
 export const faqs = [
   {
-    q: "What exactly is a Freelance Visa?",
+    q: "What is a Freelance Visa?",
     a: "It's a visa that lets you legally live in your destination country while working — for clients or an employer elsewhere, online, onsite, or in a hybrid arrangement. It's built for remote and freelance workers rather than in-country employees, so it doesn't require local sponsorship.",
   },
   {
@@ -234,7 +234,7 @@ export const faqs = [
   },
   {
     q: "How much does a Freelance Visa cost?",
-    a: `The Freelance Visa Processing Fee is a flat $${PROCESSING_FEE_USD} USD for the Gulf destinations we cover, and $${AUSTRALIA_FEE_USD} USD for Australia, reflecting its longer processing. Payment is via M-Pesa once your application is submitted.`,
+    a: `The Freelance Visa Processing Fee is a flat $${PROCESSING_FEE_USD} USD for the Gulf destinations we cover, and $${AUSTRALIA_FEE_USD} USD for Australia, reflecting its longer processing. Payment is via M-Pesa`,
   },
   {
     q: "How long is a Freelance Visa valid?",
@@ -250,7 +250,7 @@ export const faqs = [
   },
   {
     q: "How do I pay the processing fee?",
-    a: "Currently via M-Pesa: during your application, you'll see our Buy Goods till number and simple steps to complete payment before you submit. Once paid, you'll receive a confirmation and a reference number for tracking.",
+    a: "Via M-Pesa: during your application, you'll see our Buy Goods till number and simple steps to complete payment before you submit. Once paid, you'll receive a confirmation and a reference number for tracking.",
   },
   {
     q: "Can I cancel my application?",

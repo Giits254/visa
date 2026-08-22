@@ -1,10 +1,14 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   // This name becomes part of your default *.workers.dev URL and is how
-  // this Worker shows up in the Cloudflare dashboard. Change it to match
-  // whatever project name you want to use (it does not need to match an
-  // existing Pages project — deploying here creates/updates a Worker).
-  "name": "manara-visas",
+  // this Worker shows up in the Cloudflare dashboard. It MUST match the
+  // Worker name your Workers Builds (git-connected CI) project expects —
+  // Cloudflare overrides the deployed script name to whatever the CI
+  // project is named, and a mismatch here breaks the WORKER_SELF_REFERENCE
+  // service binding below (it points at a Worker name that then doesn't
+  // exist). If you rename the Workers Builds project in the dashboard,
+  // update this to match.
+  "name": "freelancevisa",
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-08-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
@@ -19,7 +23,7 @@
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
-      "service": "manara-visas"
+      "service": "freelancevisa"
     }
   ],
 
@@ -35,38 +39,17 @@
   // Non-secret configuration. Real secrets (API keys) are set with
   // `wrangler secret put <NAME>` instead — see README.md.
   "vars": {
-    "RESEND_FROM_EMAIL": "Freelance Visa <hello@freelancevisa.co>",
+    // INTERIM: onboarding@resend.dev needs no domain verification, but
+    // Resend will only deliver mail sent from it to the email address the
+    // Resend account itself is signed up with (freelancevisa733@gmail.com).
+    // That means the platform notification email works today, but the
+    // applicant confirmation email and the contact-form auto-reply — both
+    // sent to arbitrary visitor addresses — will silently fail (check
+    // `wrangler tail` for "Resend send failed" logs) until you verify a
+    // real domain in Resend and swap this back to an address on it, e.g.
+    // "Freelance Visa <hello@freelancevisa.co>".
+    "RESEND_FROM_EMAIL": "Freelance Visa <onboarding@resend.dev>",
     "PLATFORM_EMAIL": "freelancevisa733@gmail.com",
     "PAYWAVE_BASE_URL": "https://paywavexpress.co.ke/v1"
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

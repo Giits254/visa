@@ -10,6 +10,18 @@ async function resendClient() {
   };
 }
 
+// The Resend SDK does NOT throw on a failed send (e.g. a 403 because the
+// sending domain isn't verified yet) — it resolves with `{ data, error }`.
+// Callers here only log-and-continue on failure (an email hiccup shouldn't
+// block an already-paid application), so without this, failed sends would
+// be silently swallowed. Check `wrangler tail` for these logs in production.
+function logIfFailed(label: string, result: { data: unknown; error: unknown }) {
+  if (result?.error) {
+    console.error(`Resend send failed (${label}):`, result.error);
+  }
+  return result;
+}
+
 function shell(title: string, bodyHtml: string) {
   return `<!doctype html>
 <html>
@@ -69,12 +81,15 @@ export async function sendApplicantConfirmationEmail(params: {
   `
   );
 
-  return resend.emails.send({
-    from,
-    to: params.to,
-    subject: `Your Freelance Visa application — ${params.referenceCode}`,
-    html,
-  });
+  return logIfFailed(
+    "applicant confirmation",
+    await resend.emails.send({
+      from,
+      to: params.to,
+      subject: `Your Freelance Visa application — ${params.referenceCode}`,
+      html,
+    })
+  );
 }
 
 export async function sendPlatformApplicationNotification(params: {
@@ -133,16 +148,19 @@ export async function sendPlatformApplicationNotification(params: {
   `
   );
 
-  return resend.emails.send({
-    from,
-    to: platformEmail,
-    replyTo: params.email,
-    subject: `New application — ${params.referenceCode} (${params.destinationName})`,
-    html,
-    attachments: params.attachment
-      ? [{ filename: params.attachment.filename, content: params.attachment.contentBase64 }]
-      : undefined,
-  });
+  return logIfFailed(
+    "platform application notification",
+    await resend.emails.send({
+      from,
+      to: platformEmail,
+      replyTo: params.email,
+      subject: `New application — ${params.referenceCode} (${params.destinationName})`,
+      html,
+      attachments: params.attachment
+        ? [{ filename: params.attachment.filename, content: params.attachment.contentBase64 }]
+        : undefined,
+    })
+  );
 }
 
 export async function sendContactEmails(params: { name: string; email: string; message: string }) {
@@ -165,18 +183,24 @@ export async function sendContactEmails(params: { name: string; email: string; m
   `
   );
 
-  await resend.emails.send({
-    from,
-    to: platformEmail,
-    replyTo: params.email,
-    subject: `Contact form — ${params.name}`,
-    html: platformHtml,
-  });
+  logIfFailed(
+    "contact form → platform",
+    await resend.emails.send({
+      from,
+      to: platformEmail,
+      replyTo: params.email,
+      subject: `Contact form — ${params.name}`,
+      html: platformHtml,
+    })
+  );
 
-  await resend.emails.send({
-    from,
-    to: params.email,
-    subject: "We got your message — Freelance Visa",
-    html: ackHtml,
-  });
+  logIfFailed(
+    "contact form → sender ack",
+    await resend.emails.send({
+      from,
+      to: params.email,
+      subject: "We got your message — Freelance Visa",
+      html: ackHtml,
+    })
+  );
 }
