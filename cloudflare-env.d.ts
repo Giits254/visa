@@ -7,10 +7,13 @@ interface CloudflareEnv {
   // Bindings
   DB: D1Database;
 
-  // Vars (all set in wrangler.jsonc "vars" — see that file's comments)
+  // Non-secret vars (set in wrangler.jsonc "vars")
   RESEND_FROM_EMAIL: string;
   PLATFORM_EMAIL: string;
   PAYWAVE_BASE_URL: string;
+
+  // Secrets (set with `wrangler secret put <NAME>` in production, and in
+  // .dev.vars for local development — never committed)
   RESEND_API_KEY: string;
   PAYWAVE_API_KEY: string;
   PAYWAVE_EMAIL: string;
