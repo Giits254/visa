@@ -65,8 +65,18 @@ export async function POST(request: Request) {
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Could not reach the payment provider.";
+    console.error(`Paywave initiateStkPush failed for msisdn ${msisdn}:`, message);
     return NextResponse.json({ error: `Payment could not be started: ${message}` }, { status: 502 });
   }
+
+  // Non-sensitive fields only (no api_key/email) — lets you confirm via
+  // `wrangler tail` that Paywave actually accepted the push request and
+  // returned real IDs, rather than a generic/stub response.
+  console.log(`Paywave STK push accepted for ${referenceCode}:`, {
+    transaction_request_id: stkResponse.transaction_request_id,
+    checkout_request_id: stkResponse.checkout_request_id,
+    merchant_request_id: stkResponse.merchant_request_id,
+  });
 
   await insertApplication(referenceCode, {
     fullName,

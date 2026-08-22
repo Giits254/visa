@@ -45,9 +45,13 @@ export async function GET(request: Request) {
         );
         if (updated) application = updated;
       }
-    } catch {
+    } catch (err) {
       // Verification hiccup — just report current (pending) status and let
-      // the frontend try again on the next poll.
+      // the frontend try again on the next poll. Logged (not swallowed
+      // silently) so a persistent failure — e.g. a missing/wrong Paywave
+      // secret in production — shows up in `wrangler tail` instead of
+      // just looking like an STK push that never arrives.
+      console.error(`Paywave verify failed for ${referenceCode}:`, err instanceof Error ? err.message : err);
     }
   }
 
