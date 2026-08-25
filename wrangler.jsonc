@@ -12,6 +12,7 @@
     "main": ".open-next/worker.js",
     "compatibility_date": "2026-08-01",
     "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+    "keep_vars": true,
   
     // Serves the static site (everything Next.js would otherwise export)
     // directly from the Worker.

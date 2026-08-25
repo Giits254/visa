@@ -10,7 +10,7 @@ export const USD_TO_KES_RATE = 0.1;
 export const freelanceVisaDefinition = {
   heading: "What is a Freelance Visa?",
   body:
-    "A Freelance Visa is a residency and entry visa that allows you to legally live in your destination country while working for clients or employers elsewhere — online, hybrid, or onsite, in whatever mix suits your work. Unlike a standard work visa, it does not require local sponsorship or an in-country employer, and unlike a tourist visa, it permits you to earn income while you're there.",
+    "A Freelance Visa is a residency and entry visa that allows you to legally live in your destination country while working for clients or employers — remotely, hybrid, or onsite, in whatever mix suits your work. Unlike a standard work visa, it does not require local sponsorship or an in-country employer, and unlike a tourist visa, it permits you to earn income while you're there.",
 };
 
 export type Destination = {
@@ -311,7 +311,6 @@ export const platformStats: PlatformStat[] = [
   { value: 160, suffix: "+", label: "Applications processed" },
   { value: 141, suffix: "+", label: "Successful visas issued" },
   { value: 19, label: "Pending review" },
-  { value: 0, prefix: "<", label: "Failed / rejected" },
 ];
 
 // PLACEHOLDER TESTIMONIALS — generic Kenyan names, not real applicants.
