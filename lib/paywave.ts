@@ -58,13 +58,16 @@ async function paywaveRequest<T>(baseUrl: string, path: string, body: Record<str
   // "Request is missing required api_key!"}) instead of a non-2xx status.
   // Without this check that error body gets returned as if it were a
   // normal success payload, silently breaking everything downstream.
-  const resultCode = (json as { ResultCode?: string | number })?.ResultCode;
-  if (resultCode !== undefined && resultCode !== null && String(resultCode) !== "0" && String(resultCode) !== "00") {
-    const message =
-      (json as { errorMessage?: string; message?: string })?.errorMessage ??
-      (json as { errorMessage?: string; message?: string })?.message ??
-      `Paywave returned ResultCode ${resultCode}`;
-    throw new Error(message);
+  //
+  // IMPORTANT: don't try to guess which ResultCode means "success" — a
+  // prior version of this check assumed "0"/"00", but production logs
+  // showed a genuine success returns ResultCode 200 (HTTP-style, not the
+  // "0 = ok" convention), which made that check reject real successes.
+  // `errorMessage` presence is the one failure signal we've actually
+  // confirmed, so key off that instead.
+  const errorMessage = (json as { errorMessage?: string })?.errorMessage;
+  if (errorMessage) {
+    throw new Error(errorMessage);
   }
 
   return json as T;
