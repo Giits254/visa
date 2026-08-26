@@ -63,7 +63,7 @@ export default function Footer() {
             <ul className="mt-4 space-y-2.5 text-sm text-sand/70">
               <li>Nairobi, Kenya</li>
               <li>hello@freelancevisa.co</li>
-              <li>+254 700 000 000</li>
+              <li>+254 718 253 265</li>
               <li>Mon–Fri, 0800 hrs–1700 hrs EAT</li>
             </ul>
           </div>

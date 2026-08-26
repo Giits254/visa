@@ -149,11 +149,22 @@ export default function ApplyPage() {
   }
 
   function validateStep1() {
-    if (isAustralia && !form.state) {
-      setErrors((prev) => ({ ...prev, state: "Select a state or territory." }));
+    const streetError = form.street.trim() ? undefined : "Enter your street address.";
+    const cityError = form.city.trim() ? undefined : "Enter your town or city.";
+    const zipError = form.zip.trim() ? undefined : "Enter your ZIP or postal code.";
+    const stateError = isAustralia && !form.state ? "Select a state or territory." : undefined;
+
+    if (streetError || cityError || zipError || stateError) {
+      setErrors((prev) => ({
+        ...prev,
+        street: streetError,
+        city: cityError,
+        zip: zipError,
+        state: stateError,
+      }));
       return false;
     }
-    setErrors((prev) => ({ ...prev, state: undefined }));
+    setErrors((prev) => ({ ...prev, street: undefined, city: undefined, zip: undefined, state: undefined }));
     return true;
   }
 

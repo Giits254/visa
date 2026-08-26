@@ -15,7 +15,7 @@ import { validateIdNumber } from "@/lib/validation";
 type Stage = "form" | "checking" | "result";
 
 const checkingSteps = [
-  "Verifying your ID and phone number",
+  "Verifying your ID",
   "Matching your nationality to Freelance Visa routes",
   "Confirming destination requirements",
   "Running background eligibility checks",

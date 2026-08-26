@@ -23,6 +23,9 @@ export type FormErrors = {
   idNumber?: string;
   nationality?: string;
   state?: string;
+  street?: string;
+  city?: string;
+  zip?: string;
   passportPhoto?: string;
 };
 

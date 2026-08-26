@@ -27,10 +27,18 @@ export default function AddressDocumentsStep({
         <input
           required
           value={form.street}
-          onChange={(e) => update("street", e.target.value)}
+          onChange={(e) => {
+            update("street", e.target.value);
+            clearError("street");
+          }}
           placeholder="House number and street name"
-          className="mt-2 w-full rounded-lg border border-night/25 bg-sand px-4 py-3 text-sm text-ink"
+          className={`mt-2 w-full rounded-lg border bg-sand px-4 py-3 text-sm text-ink ${
+            errors.street ? "border-red-500" : "border-night/25"
+          }`}
         />
+        {errors.street && (
+          <p className="mt-1.5 text-xs font-medium text-red-600">{errors.street}</p>
+        )}
       </label>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <label className="block">
@@ -38,20 +46,36 @@ export default function AddressDocumentsStep({
           <input
             required
             value={form.city}
-            onChange={(e) => update("city", e.target.value)}
+            onChange={(e) => {
+              update("city", e.target.value);
+              clearError("city");
+            }}
             placeholder="e.g. Nairobi"
-            className="mt-2 w-full rounded-lg border border-night/25 bg-sand px-4 py-3 text-sm text-ink"
+            className={`mt-2 w-full rounded-lg border bg-sand px-4 py-3 text-sm text-ink ${
+              errors.city ? "border-red-500" : "border-night/25"
+            }`}
           />
+          {errors.city && (
+            <p className="mt-1.5 text-xs font-medium text-red-600">{errors.city}</p>
+          )}
         </label>
         <label className="block">
           <span className="text-sm font-medium text-night">ZIP / postal code</span>
           <input
             required
             value={form.zip}
-            onChange={(e) => update("zip", e.target.value)}
+            onChange={(e) => {
+              update("zip", e.target.value);
+              clearError("zip");
+            }}
             placeholder="e.g. 00100"
-            className="mt-2 w-full rounded-lg border border-night/25 bg-sand px-4 py-3 text-sm text-ink"
+            className={`mt-2 w-full rounded-lg border bg-sand px-4 py-3 text-sm text-ink ${
+              errors.zip ? "border-red-500" : "border-night/25"
+            }`}
           />
+          {errors.zip && (
+            <p className="mt-1.5 text-xs font-medium text-red-600">{errors.zip}</p>
+          )}
         </label>
       </div>
       <label className="block">
