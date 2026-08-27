@@ -61,7 +61,7 @@ export default function InvoiceReceipt({
                   Freelance Visa
                 </p>
                 <p className="mt-1 text-xs text-ink/60">
-                  Nairobi, Kenya · hello@freelancevisa.co
+                  Nairobi, Kenya · info@freelancevisaabroad.com
                 </p>
               </div>
               <div className="text-right">

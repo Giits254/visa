@@ -1,5 +1,16 @@
 export const BRAND_NAME = "Freelance Visa";
 
+// Physical office address + phone shown in the footer. Centralized here so
+// a change only needs to happen in one place.
+export const officeAddress = {
+  building: "Global Trade Center",
+  floor: "Floor No. 12",
+  area: "Westlands",
+  cityCountry: "Nairobi, Kenya",
+};
+
+export const officePhone = "+254 718 253 265";
+
 export const PROCESSING_FEE_USD = 100; // baseline fee (all destinations except Australia)
 export const AUSTRALIA_FEE_USD = 150;
 export const PROCESSING_FEE_LABEL = "Freelance Visa Processing Fee";
@@ -286,7 +297,7 @@ export const cancellationPolicy = [
   {
     title: "How to request a cancellation",
     detail:
-      "Email hello@freelancevisa.co with your reference number and reason for cancellation. Refunds, where applicable, are processed within 5–7 business days to the original M-Pesa number used for payment.",
+      "Email info@freelancevisaabroad.com with your reference number and reason for cancellation. Refunds, where applicable, are processed within 5–7 business days to the original M-Pesa number used for payment.",
   },
   {
     title: "Changes of destination",
@@ -361,12 +372,14 @@ export const testimonials = [
 // states Freelance Visa is independent and "not affiliated with any
 // embassy or consulate" — that line and this section need to agree with
 // each other and with whatever the real relationship actually is.
+// `slug` maps to /public/flags/<slug>.png. `name` is kept for alt text
+// even though the section displays flags only, no visible labels.
 export const partners = [
-  { flag: "🇦🇪", name: "Embassy of the UAE" },
-  { flag: "🇶🇦", name: "Embassy of Qatar" },
-  { flag: "🇸🇦", name: "Embassy of Saudi Arabia" },
-  { flag: "🇰🇼", name: "Embassy of Kuwait" },
-  { flag: "🇧🇭", name: "Embassy of Bahrain" },
-  { flag: "🇴🇲", name: "Embassy of Oman" },
-  { flag: "🇦🇺", name: "Australian High Commission" },
+  { slug: "uae", name: "Embassy of the UAE" },
+  { slug: "qatar", name: "Embassy of Qatar" },
+  { slug: "saudi", name: "Embassy of Saudi Arabia" },
+  { slug: "kuwait", name: "Embassy of Kuwait" },
+  { slug: "bahrain", name: "Embassy of Bahrain" },
+  { slug: "oman", name: "Embassy of Oman" },
+  { slug: "australia", name: "Australian High Commission" },
 ];

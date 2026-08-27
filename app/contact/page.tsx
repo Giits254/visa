@@ -58,13 +58,13 @@ export default function ContactPage() {
             <div className="rounded-2xl border border-night/10 bg-white p-6">
               <p className="text-xs font-medium uppercase tracking-wider text-ink/60">Email</p>
               <p className="mt-1 font-display text-base font-semibold text-night">
-                hello@freelancevisa.co
+                info@freelancevisaabroad.com
               </p>
             </div>
             <div className="rounded-2xl border border-night/10 bg-white p-6">
               <p className="text-xs font-medium uppercase tracking-wider text-ink/60">Phone</p>
               <p className="mt-1 font-display text-base font-semibold text-night">
-                +254 718 253 265
+                +254 700 000 000
               </p>
             </div>
             <div className="rounded-2xl border border-night/10 bg-white p-6">
@@ -72,7 +72,7 @@ export default function ContactPage() {
               <p className="mt-1 font-display text-base font-semibold text-night">
                 Nairobi, Kenya
               </p>
-              <p className="mt-1 text-sm text-ink/70">Mon–Fri, 0800 hrs–1700 hrs EAT</p>
+              <p className="mt-1 text-sm text-ink/70">Mon–Fri, 8:00–17:00 EAT</p>
             </div>
           </div>
 

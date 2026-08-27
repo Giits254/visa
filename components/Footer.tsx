@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { officeAddress, officePhone } from "@/lib/data";
 
 export default function Footer() {
   return (
@@ -61,10 +62,13 @@ export default function Footer() {
               Contact
             </p>
             <ul className="mt-4 space-y-2.5 text-sm text-sand/70">
-              <li>Nairobi, Kenya</li>
-              <li>hello@freelancevisa.co</li>
-              <li>+254 718 253 265</li>
-              <li>Mon–Fri, 0800 hrs–1700 hrs EAT</li>
+              <li>{officeAddress.building}</li>
+              <li>{officeAddress.floor}</li>
+              <li>{officeAddress.area}</li>
+              <li>{officeAddress.cityCountry}</li>
+              <li>info@freelancevisaabroad.com</li>
+              <li>{officePhone}</li>
+              <li>Mon–Fri, 8:00–17:00 EAT</li>
             </ul>
           </div>
         </div>

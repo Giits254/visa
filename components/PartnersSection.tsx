@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { partners } from "@/lib/data";
 
 export default function PartnersSection() {
@@ -18,18 +19,21 @@ export default function PartnersSection() {
           </p>
         </div>
 
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-x-10 gap-y-8 sm:gap-x-14">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-6 sm:gap-x-10">
           {partners.map((partner) => (
             <div
-              key={partner.name}
-              className="group flex items-center gap-2.5 grayscale opacity-60 transition hover:opacity-100 hover:grayscale-0"
+              key={partner.slug}
+              className="grayscale opacity-60 transition hover:opacity-100 hover:grayscale-0"
+              title={partner.name}
             >
-              <span className="text-2xl sm:text-3xl" aria-hidden>
-                {partner.flag}
-              </span>
-              <span className="whitespace-nowrap font-display text-sm font-semibold text-night/70 transition group-hover:text-night sm:text-base">
-                {partner.name}
-              </span>
+              <Image
+                src={`/flags/${partner.slug}.png`}
+                alt={partner.name}
+                width={56}
+                height={56}
+                unoptimized
+                className="h-12 w-12 rounded-full object-cover shadow-sm sm:h-14 sm:w-14"
+              />
             </div>
           ))}
         </div>

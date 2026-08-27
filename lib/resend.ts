@@ -62,7 +62,7 @@ export async function sendApplicantConfirmationEmail(params: {
   feeUsd: number;
   avgProcessing: string;
 }) {
-  const { resend, from } = await resendClient();
+  const { resend, from, platformEmail } = await resendClient();
   const firstName = params.fullName.split(" ")[0] || "there";
 
   const html = shell(
@@ -86,6 +86,10 @@ export async function sendApplicantConfirmationEmail(params: {
     await resend.emails.send({
       from,
       to: params.to,
+      // The sending domain doesn't necessarily have a real inbox behind
+      // it — route any reply to the platform's actual monitored address
+      // instead of a "from" address that might just swallow it.
+      replyTo: platformEmail,
       subject: `Your Freelance Visa application — ${params.referenceCode}`,
       html,
     })
@@ -199,6 +203,9 @@ export async function sendContactEmails(params: { name: string; email: string; m
     await resend.emails.send({
       from,
       to: params.email,
+      // Same reasoning as the applicant confirmation email above — send
+      // replies to the platform's real inbox, not the sending address.
+      replyTo: platformEmail,
       subject: "We got your message — Freelance Visa",
       html: ackHtml,
     })
