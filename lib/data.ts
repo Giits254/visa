@@ -290,11 +290,6 @@ export const cancellationPolicy = [
       "Once your Freelance Visa application has been submitted to the relevant embassy, immigration department, or issuing authority, the processing fee becomes non-refundable, as third-party processing costs have already been incurred.",
   },
   {
-    title: "Rejected applications",
-    detail:
-      "If an application is rejected by the issuing authority for reasons outside your control (system error, processing fault), the processing fee is fully refunded. If rejected due to incomplete or inaccurate information you provided, standard cancellation terms above apply.",
-  },
-  {
     title: "How to request a cancellation",
     detail:
       "Email info@freelancevisaabroad.com with your reference number and reason for cancellation. Refunds, where applicable, are processed within 5–7 business days to the original M-Pesa number used for payment.",
